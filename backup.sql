@@ -53,7 +53,10 @@ CREATE TABLE `blog_posts` (
 ) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> cf36c9bfe7ef3c5d50c727b5bf01f3982fb58093
 --
 -- Table structure for table `inquiries`
 --
@@ -78,7 +81,10 @@ CREATE TABLE `inquiries` (
 ) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> cf36c9bfe7ef3c5d50c727b5bf01f3982fb58093
 --
 -- Table structure for table `products`
 --
