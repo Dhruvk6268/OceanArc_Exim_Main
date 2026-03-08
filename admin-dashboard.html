@@ -371,6 +371,82 @@
         margin-right: 6px;
       }
 
+      .analytics-filters {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 10px;
+        background: #f6f9fd;
+        border: 1px solid #dce8f6;
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin-bottom: 14px;
+      }
+
+      .analytics-filter-item {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .analytics-filter-item label {
+        font-size: 0.8rem;
+        color: #476382;
+        font-weight: 700;
+      }
+
+      .analytics-filter-item input[type="date"] {
+        border: 1px solid #c9d9ec;
+        border-radius: 7px;
+        padding: 7px 9px;
+        min-width: 150px;
+      }
+
+      .analytics-filter-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .analytics-filter-btn {
+        border: 1px solid #0f5fb5;
+        background: #0f5fb5;
+        color: #fff;
+        border-radius: 7px;
+        padding: 8px 11px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .analytics-filter-btn.secondary {
+        background: #fff;
+        color: #0f5fb5;
+      }
+
+      .analytics-page-info {
+        margin-left: auto;
+        color: #3f5a77;
+        font-size: 0.88rem;
+        font-weight: 600;
+      }
+
+      .analytics-logs-scroll {
+        max-height: 520px;
+        overflow-y: auto;
+        border: 1px solid #edf2f8;
+        border-radius: 8px;
+      }
+
+      .analytics-logs-scroll .analytics-table {
+        margin-top: 0;
+      }
+
+      .analytics-logs-loading {
+        font-size: 0.85rem;
+        color: #577496;
+        text-align: center;
+        padding: 10px 6px 4px;
+      }
+
       @media (max-width: 992px) {
         .admin-layout {
           grid-template-columns: 1fr;
@@ -407,6 +483,11 @@
 
         .analytics-grid {
           grid-template-columns: 1fr;
+        }
+
+        .analytics-page-info {
+          width: 100%;
+          margin-left: 0;
         }
       }
     </style>
@@ -532,6 +613,22 @@
           </button>
         </div>
 
+        <div class="analytics-filters">
+          <div class="analytics-filter-item">
+            <label for="analyticsStartDate">From Date</label>
+            <input type="date" id="analyticsStartDate" />
+          </div>
+          <div class="analytics-filter-item">
+            <label for="analyticsEndDate">To Date</label>
+            <input type="date" id="analyticsEndDate" />
+          </div>
+          <div class="analytics-filter-actions">
+            <button id="applyAnalyticsDateBtn" class="analytics-filter-btn">Apply</button>
+            <button id="resetAnalyticsDateBtn" class="analytics-filter-btn secondary">Reset</button>
+          </div>
+          <div id="analyticsPageInfo" class="analytics-page-info">Showing 0 logs</div>
+        </div>
+
         <div class="analytics-cards">
           <div class="analytics-card">
             <h4>Total Views</h4>
@@ -554,22 +651,25 @@
         <div class="analytics-grid">
           <div class="analytics-panel">
             <h3>Recent User Logs</h3>
-            <table class="analytics-table" id="analyticsLogsTable">
-              <thead>
-                <tr>
-                  <th>Page</th>
-                  <th>Location</th>
-                  <th>Device</th>
-                  <th>Browser</th>
-                  <th>Last Activity</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td colspan="5">No analytics data yet</td>
-                </tr>
-              </tbody>
-            </table>
+            <div id="analyticsLogsScroll" class="analytics-logs-scroll">
+              <table class="analytics-table" id="analyticsLogsTable">
+                <thead>
+                  <tr>
+                    <th>Page</th>
+                    <th>Location</th>
+                    <th>Device</th>
+                    <th>Browser</th>
+                    <th>Last Activity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="5">No analytics data yet</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="analyticsLogsLoading" class="analytics-logs-loading">Scroll down to load more logs</div>
           </div>
           <div class="analytics-panel">
             <h3>Top Pages</h3>

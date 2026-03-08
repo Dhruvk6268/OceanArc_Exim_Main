@@ -25,5 +25,7 @@ CREATE TABLE IF NOT EXISTS `website_analytics` (
   KEY `idx_analytics_session` (`session_id`),
   KEY `idx_analytics_activity` (`last_activity`),
   KEY `idx_analytics_visit_start` (`visit_start`),
-  KEY `idx_analytics_page` (`page_url`(191))
+  KEY `idx_analytics_page` (`page_url`(191)),
+  KEY `idx_analytics_session_page_recent` (`session_id`,`page_url`(191),`last_activity`),
+  KEY `idx_analytics_date_activity` (`visit_start`,`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

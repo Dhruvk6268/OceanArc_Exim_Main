@@ -116,7 +116,16 @@ function logoutAdmin() {
 /* ---------------- TABS ---------------- */
 const ADMIN_TAB_STORAGE_KEY = "oceanarc_admin_active_tab";
 const ANALYTICS_REFRESH_INTERVAL_MS = 15000;
+const ANALYTICS_PAGE_SIZE = 20;
 let analyticsRefreshTimer = null;
+const analyticsState = {
+  startDate: "",
+  endDate: "",
+  page: 1,
+  total: 0,
+  hasMore: true,
+  loading: false,
+};
 
 function activateAdminTab(tabName) {
   const targetTab = document.querySelector(`.admin-tab[data-tab="${tabName}"]`);
@@ -477,6 +486,52 @@ function setupEventListeners() {
   if (refreshAnalyticsBtn) {
     refreshAnalyticsBtn.addEventListener("click", () => {
       loadAnalytics();
+    });
+  }
+
+  const applyAnalyticsDateBtn = document.getElementById("applyAnalyticsDateBtn");
+  if (applyAnalyticsDateBtn) {
+    applyAnalyticsDateBtn.addEventListener("click", () => {
+      const startDate = (document.getElementById("analyticsStartDate")?.value || "").trim();
+      const endDate = (document.getElementById("analyticsEndDate")?.value || "").trim();
+
+      if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+        alert("From date cannot be after To date.");
+        return;
+      }
+
+      analyticsState.startDate = startDate;
+      analyticsState.endDate = endDate;
+      loadAnalytics();
+    });
+  }
+
+  const resetAnalyticsDateBtn = document.getElementById("resetAnalyticsDateBtn");
+  if (resetAnalyticsDateBtn) {
+    resetAnalyticsDateBtn.addEventListener("click", () => {
+      const startDateInput = document.getElementById("analyticsStartDate");
+      const endDateInput = document.getElementById("analyticsEndDate");
+      if (startDateInput) startDateInput.value = "";
+      if (endDateInput) endDateInput.value = "";
+
+      analyticsState.startDate = "";
+      analyticsState.endDate = "";
+      loadAnalytics();
+    });
+  }
+
+  const analyticsLogsScroll = document.getElementById("analyticsLogsScroll");
+  if (analyticsLogsScroll && analyticsLogsScroll.dataset.bound !== "1") {
+    analyticsLogsScroll.dataset.bound = "1";
+    analyticsLogsScroll.addEventListener("scroll", () => {
+      const distanceFromBottom =
+        analyticsLogsScroll.scrollHeight -
+        analyticsLogsScroll.scrollTop -
+        analyticsLogsScroll.clientHeight;
+
+      if (distanceFromBottom < 120) {
+        loadAnalytics({ append: true });
+      }
     });
   }
 
@@ -1586,6 +1641,31 @@ function renderAnalyticsSummary(summary = {}) {
   }
 }
 
+function getRenderedAnalyticsRowsCount() {
+  return document.querySelectorAll("#analyticsLogsTable tbody tr[data-log-row='1']").length;
+}
+
+function updateAnalyticsPageInfo() {
+  const infoEl = document.getElementById("analyticsPageInfo");
+  if (!infoEl) return;
+
+  const shown = getRenderedAnalyticsRowsCount();
+  const total = Number(analyticsState.total || 0);
+
+  if (!total) {
+    infoEl.textContent = "Showing 0 logs";
+    return;
+  }
+
+  infoEl.textContent = `Showing ${shown} of ${total} logs`;
+}
+
+function updateAnalyticsLoadingHint(message) {
+  const hintEl = document.getElementById("analyticsLogsLoading");
+  if (!hintEl) return;
+  hintEl.textContent = message;
+}
+
 function sanitizePagePath(pageUrl) {
   const raw = String(pageUrl || "").trim();
   if (!raw) return "/";
@@ -1602,14 +1682,18 @@ function sanitizePagePath(pageUrl) {
   return raw;
 }
 
-function renderAnalyticsLogs(logs = []) {
+function renderAnalyticsLogs(logs = [], append = false) {
   const tbody = document.querySelector("#analyticsLogsTable tbody");
   if (!tbody) return;
 
-  tbody.innerHTML = "";
+  if (!append) {
+    tbody.innerHTML = "";
+  }
 
   if (!Array.isArray(logs) || !logs.length) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No analytics data yet</td></tr>`;
+    if (!append) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No analytics data yet</td></tr>`;
+    }
     return;
   }
 
@@ -1621,6 +1705,7 @@ function renderAnalyticsLogs(logs = []) {
     const lastActivity = escapeHtml(formatRelativeTimestamp(log.last_activity));
 
     const row = document.createElement("tr");
+    row.setAttribute("data-log-row", "1");
     row.innerHTML = `
       <td>${page}</td>
       <td>${location}</td>
@@ -1653,28 +1738,86 @@ function renderAnalyticsTopPages(topPages = []) {
   });
 }
 
-function loadAnalytics() {
-  fetch("php/get-analytics.php")
+function loadAnalytics(options = {}) {
+  const append = options.append === true;
+  if (analyticsState.loading) return;
+  if (append && !analyticsState.hasMore) return;
+
+  if (!append) {
+    analyticsState.page = 1;
+    analyticsState.hasMore = true;
+    const logsScroll = document.getElementById("analyticsLogsScroll");
+    if (logsScroll) {
+      logsScroll.scrollTop = 0;
+    }
+  } else {
+    analyticsState.page += 1;
+  }
+
+  const params = new URLSearchParams();
+  params.set("page", String(analyticsState.page));
+  params.set("limit", String(ANALYTICS_PAGE_SIZE));
+  if (analyticsState.startDate) {
+    params.set("start_date", analyticsState.startDate);
+  }
+  if (analyticsState.endDate) {
+    params.set("end_date", analyticsState.endDate);
+  }
+
+  analyticsState.loading = true;
+  updateAnalyticsLoadingHint(append ? "Loading more logs..." : "Loading analytics...");
+
+  fetch(`php/get-analytics.php?${params.toString()}`)
     .then((r) => r.json())
     .then((data) => {
       if (!data || !data.success) {
         const errorMessage = data?.error || "Unable to load analytics";
-        renderAnalyticsSummary({});
-        renderAnalyticsLogs([]);
-        renderAnalyticsTopPages([]);
+        if (append) {
+          analyticsState.page = Math.max(1, analyticsState.page - 1);
+        } else {
+          renderAnalyticsSummary({});
+          renderAnalyticsLogs([], false);
+          renderAnalyticsTopPages([]);
+          analyticsState.total = 0;
+          analyticsState.hasMore = false;
+          updateAnalyticsPageInfo();
+        }
         console.error("Analytics load error:", errorMessage);
         return;
       }
 
       renderAnalyticsSummary(data.summary || {});
-      renderAnalyticsLogs(data.recent_logs || []);
+      renderAnalyticsLogs(data.recent_logs || [], append);
       renderAnalyticsTopPages(data.top_pages || []);
+
+      const pagination = data.pagination || {};
+      analyticsState.total = Number(pagination.total || 0);
+      analyticsState.hasMore = Boolean(pagination.has_more);
+      analyticsState.page = Number(pagination.page || analyticsState.page);
+      updateAnalyticsPageInfo();
     })
     .catch((err) => {
       console.error("Analytics request failed:", err);
-      renderAnalyticsSummary({});
-      renderAnalyticsLogs([]);
-      renderAnalyticsTopPages([]);
+      if (append) {
+        analyticsState.page = Math.max(1, analyticsState.page - 1);
+      } else {
+        renderAnalyticsSummary({});
+        renderAnalyticsLogs([], false);
+        renderAnalyticsTopPages([]);
+        analyticsState.total = 0;
+        analyticsState.hasMore = false;
+        updateAnalyticsPageInfo();
+      }
+    })
+    .finally(() => {
+      analyticsState.loading = false;
+      if (!analyticsState.total) {
+        updateAnalyticsLoadingHint("No logs for selected date range");
+      } else if (analyticsState.hasMore) {
+        updateAnalyticsLoadingHint("Scroll down to load more logs");
+      } else {
+        updateAnalyticsLoadingHint("All logs loaded");
+      }
     });
 }
 

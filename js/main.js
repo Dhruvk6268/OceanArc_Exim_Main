@@ -255,10 +255,76 @@ function bindInquiryButtons() {
     document.body.dataset.inquiryBound = '1';
 }
 
+let analyticsPingTimer = null;
+let analyticsTrackingId = 0;
+let analyticsPingInFlight = false;
+
+function sendAnalyticsPing() {
+    if (analyticsPingInFlight) return;
+
+    const pageUrl = window.location.pathname + window.location.search + window.location.hash;
+    const payload = new URLSearchParams();
+    payload.set('page_url', pageUrl);
+
+    if (analyticsTrackingId > 0) {
+        payload.set('tracking_id', String(analyticsTrackingId));
+    }
+
+    analyticsPingInFlight = true;
+    fetch('php/track-analytics.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: payload.toString(),
+        credentials: 'same-origin',
+        keepalive: true
+    })
+    .then(response => {
+        if (!response.ok) return null;
+        return response.json().catch(() => null);
+    })
+    .then(data => {
+        const trackingId = Number(data?.tracking_id || 0);
+        if (trackingId > 0) {
+            analyticsTrackingId = trackingId;
+        }
+    }).catch(() => {
+        // Analytics errors should never block user actions.
+    }).finally(() => {
+        analyticsPingInFlight = false;
+    });
+}
+
+function initVisitorAnalyticsTracking() {
+    const path = window.location.pathname.toLowerCase();
+    if (path.includes('admin-dashboard') || path.includes('admin-login')) return;
+
+    analyticsTrackingId = 0;
+    sendAnalyticsPing();
+
+    if (analyticsPingTimer) {
+        clearInterval(analyticsPingTimer);
+    }
+
+    analyticsPingTimer = setInterval(() => {
+        if (document.visibilityState === 'visible') {
+            sendAnalyticsPing();
+        }
+    }, 60000);
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            sendAnalyticsPing();
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     bindHeaderInteractions();
     bindInquiryButtons();
     applyPendingInquiryToForm();
+    initVisitorAnalyticsTracking();
     lazyLoadDeferredMedia(document);
     optimizeAutoplayVideos(document);
 
