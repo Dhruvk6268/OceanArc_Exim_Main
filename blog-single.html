@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en" class="page-anim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog Post - OceanArc Exim</title>
+    <!-- SEO Meta -->
+    <meta name="description" content="Read the latest blog from OceanArc Exim on global trade, agriculture, garments, and export business insights." />
+    <meta name="keywords" content="OceanArc Exim blog, Industry News, Industry Updates, global exports, agriculture, garments, international trade, business insights" />
+    <meta name="author" content="OceanArc Exim" />
+    <link rel="canonical" href="https://oceanarcexim.com/blog-single.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Loading Blog..." id="og-title" />
+    <meta property="og:description" content="Read insights on agriculture and global trade by OceanArc Exim." id="og-desc"/>
+    <meta property="og:url" content="https://oceanarcexim.com/blog-single.html" id="og-url"/>
+    <meta property="og:image" content="https://oceanarcexim.com/images/blog-placeholder.jpg" id="og-image"/>
+    <meta property="og:site_name" content="OceanArc Exim" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Loading Blog..." id="tw-title" />
+    <meta name="twitter:description" content="Read insights on agriculture and global trade by OceanArc Exim." id="tw-desc"/>
+    <meta name="twitter:image" content="https://oceanarcexim.com/images/blog-placeholder.jpg" id="tw-image"/>
+    <meta name="twitter:site" content="@oceanarcexim" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json" id="blog-json-ld">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Loading Blog...",
+      "description": "Read the latest blog from OceanArc Exim on global trade, agriculture, garments, and export business insights.",
+      "image": "https://oceanarcexim.com/images/blog-placeholder.jpg",
+      "author": {
+        "@type": "Organization",
+        "name": "OceanArc Exim"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "OceanArc Exim",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oceanarcexim.com/images/logo.svg"
+        }
+      },
+      "datePublished": "2025-01-01T00:00:00+05:30"
+    }
+    </script>   
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" href="images/logo.svg" type="image/svg+xml">
+    <style>
+      /* Additional styles for single blog page */
+      .single-blog-page {
+        padding: 60px 0;
+      }
+
+      .post-container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 20px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .post-header {
+        position: static;
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .post-title {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+        color: white;
+        background: none !important;
+        background-color: transparent !important;
+        -webkit-text-fill-color: white;
+        padding: 0;
+        display: inline;
+        text-decoration: none !important;
+        box-shadow: none !important;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .single-blog-page .post-container .post-header .post-title{
+       text-shadow: none !important;
+      }
+
+      .post-meta {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 30px;
+      }
+
+      /* Split layout for blog post - HIGH SPECIFICITY TO OVERRIDE EXTERNAL CSS */
+      .single-blog-page .blog-split-layout {
+        display: flex !important;
+        gap: 40px !important;
+        align-items: flex-start !important;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .single-blog-page .blog-image-side {
+        flex: 1 !important;
+        position: sticky !important;
+        top: 100px !important;
+        transition: all 0.3s ease !important;
+        height: fit-content !important;
+        align-self: flex-start !important;
+        z-index: 10 !important;
+        box-sizing: border-box;
+      }
+
+      .single-blog-page .blog-content-side {
+        flex: 1 !important;
+        width: 100%;
+        box-sizing: border-box;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        hyphens: auto;
+      }
+
+      .single-blog-page .blog-image-container {
+        width: 100% !important;
+        border-radius: 8px !important;
+        overflow: hidden !important;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+        box-sizing: border-box;
+      }
+
+      .single-blog-page .blog-image-container img {
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        object-fit: cover !important;
+      }
+
+      .post-content {
+        line-height: 1.8;
+        font-size: 1.1rem;
+        margin-top: -5px;
+        width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+      }
+
+      .post-content-wrapper {
+        width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+      }
+
+      .post-content p {
+        margin-bottom: 20px;
+        max-width: 100%;
+      }
+
+      /* Ensure all content elements don't overflow */
+      .post-content * {
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      /* Ensure images in content don't overflow */
+      .post-content img {
+        max-width: 100% !important;
+        height: auto !important;
+        display: block;
+      }
+
+      /* Fix for long URLs or unbreakable text */
+      .post-content a {
+        word-break: break-all;
+        overflow-wrap: break-word;
+      }
+
+      /* Fix table responsiveness if you have tables in content */
+      .post-content table {
+        width: 100% !important;
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .back-to-blog {
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 30px;
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        box-sizing: border-box;
+      }
+
+      .back-to-blog i {
+        margin-right: 8px;
+        transition: transform 0.3s ease;
+      }
+
+      .back-to-blog:hover i {
+        transform: translateX(-5px);
+      }
+
+      /* Loading spinner styles */
+      .loading-spinner {
+        text-align: center;
+        padding: 40px 0;
+      }
+      .spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top: 4px solid var(--primary-color);
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      /* Error message styles */
+      .error-message {
+        text-align: center;
+        padding: 40px 0;
+        color: #dc3545;
+      }
+
+      .error-message i {
+        font-size: 3rem;
+        margin-bottom: 20px;
+      }
+
+      /* Responsive styles - HIGH SPECIFICITY */
+      @media (max-width: 1200px) {
+        .post-container {
+          padding: 0 30px;
+        }
+      }
+
+      @media (max-width: 992px) {
+        .single-blog-page .blog-split-layout {
+          flex-direction: column !important;
+          gap: 30px !important;
+          margin: 0;
+          width: 100%;
+        }
+        
+        .single-blog-page .blog-image-side {
+          position: static !important;
+          width: 100% !important;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+        
+        .single-blog-page .blog-content-side {
+          width: 100%;
+          padding: 0;
+        }
+        
+        .post-title {
+          font-size: 2rem;
+          padding: 0 10px;
+        }
+
+        .post-container {
+          padding: 0 25px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .post-title {
+          font-size: 1.8rem;
+          padding: 0 8px;
+        }
+        
+        .post-content {
+          font-size: 1rem;
+          padding: 0;
+          width: 100%;
+        }
+
+        .post-content p,
+        .post-content h1,
+        .post-content h2,
+        .post-content h3,
+        .post-content h4,
+        .post-content h5,
+        .post-content h6,
+        .post-content ul,
+        .post-content ol,
+        .post-content li {
+          max-width: 100% !important;
+          box-sizing: border-box;
+          word-wrap: break-word;
+          padding-right: 0;
+        }
+
+        .post-container {
+          padding: 0 20px;
+          max-width: 100%;
+        }
+
+        .single-blog-page .blog-split-layout {
+          margin: 0;
+          width: 100%;
+        }
+
+        .single-blog-page .blog-content-side {
+          padding: 0;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .single-blog-page {
+          padding: 40px 0;
+        }
+
+        .post-container {
+          padding: 0 16px;
+        }
+
+        .post-title {
+          font-size: 1.6rem;
+          padding: 0 5px;
+        }
+        
+        .post-content {
+          font-size: 0.95rem;
+          line-height: 1.6;
+        }
+
+        .back-to-blog {
+          font-size: 0.9rem;
+          padding-left: 5px;
+        }
+
+        .single-blog-page .blog-image-side {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .post-container {
+          padding: 0 12px;
+        }
+        
+        .post-title {
+          font-size: 1.4rem;
+        }
+        
+        .post-content {
+          font-size: 0.9rem;
+          line-height: 1.5;
+        }
+
+        .single-blog-page {
+          padding: 30px 0;
+        }
+      }
+    </style>
+  </head>
+  <body data-page="blog">
+    <!-- WhatsApp Button -->
+<a href="https://wa.me/917096200535?text=Hi%20OceanArc%20Exim!%20Let's%20connect." 
+   class="whatsapp-button" target="_blank" aria-label="Chat with us on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+</a>
+    <!-- Header (unchanged) -->
+        <div id="site-header"></div>
+
+    <!-- Single Blog Post Content -->
+    <main class="single-blog-page">
+      <div class="container post-container">
+        <a href="blog.html" class="back-to-blog">
+          <i class="fas fa-arrow-left"></i> Back to Blog
+        </a>
+
+        <article id="blogPost">
+          <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading post...</p>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <!-- Footer (unchanged) -->
+        <div id="site-footer"></div>
+    
+        <script src="js/layout.js" defer></script>
+<script src="js/main.js"></script>
+    <script>
+      // Updated blog-single.js with clean URL handling and script execution fix
+      document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('id');
+        const postSlug = urlParams.get('slug');
+        const blogPost = document.getElementById('blogPost');
+        
+        // Check for direct parameter (like ?why-global-buyers-choose...)
+        let directParam = null;
+        // Get all parameter names
+        const paramKeys = Array.from(urlParams.keys());
+        
+        // Find first parameter that's not 'id' or 'slug'
+        for (const key of paramKeys) {
+          if (key !== 'id' && key !== 'slug') {
+            directParam = key;
+            break;
+          }
+        }
+
+        if (!postSlug && !postId && !directParam) {
+          showError('No post specified in URL');
+          return;
+        }
+
+        showLoading();
+
+        // Determine fetch URL based on available parameters
+        let fetchUrl;
+        if (directParam) {
+          // Direct parameter like ?why-global-buyers-choose...
+          fetchUrl = `php/get-blog-post.php?slug=${encodeURIComponent(directParam)}`;
+        } else if (postSlug) {
+          // Standard slug parameter
+          fetchUrl = `php/get-blog-post.php?slug=${encodeURIComponent(postSlug)}`;
+        } else {
+          // ID parameter
+          fetchUrl = `php/get-blog-post.php?id=${postId}`;
+        }
+
+        fetch(fetchUrl)
+          .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+          })
+          .then(data => {
+            if (data.error) throw new Error(data.error);
+            
+            // Clean the URL to show just the slug without "slug="
+            if (data.slug) {
+              cleanURL(data.slug);
+            }
+            
+            renderPost(data);
+            // Initialize scroll behavior after post is rendered
+            setTimeout(initScrollBehavior, 300);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            showError(error.message || 'Failed to load post');
+          });
+
+        function cleanURL(slug) {
+          if (!slug) return;
+          
+          // Create a clean URL with just the slug as parameter (no "slug=")
+          const cleanUrl = `${window.location.pathname}?${slug}`;
+          const cleanTitle = `${document.title} - OceanArc Exim Blog`;
+          
+          // Store current URL in sessionStorage for page refresh
+          sessionStorage.setItem('lastBlogSlug', slug);
+          
+          // Update browser history without page reload
+          window.history.replaceState(
+            { 
+              clean: true,
+              hasPost: true,
+              slug: slug,
+              timestamp: Date.now()
+            },
+            cleanTitle,
+            cleanUrl
+          );
+          
+          // Update SEO meta tags
+          updateCanonicalURL(cleanUrl);
+          
+          // Handle back/forward navigation
+          window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.clean && event.state.slug) {
+              // User navigated back/forward, maintain clean URL
+              const backUrl = `${window.location.pathname}?${event.state.slug}`;
+              window.history.replaceState(
+                { 
+                  clean: true,
+                  hasPost: true,
+                  slug: event.state.slug,
+                  timestamp: event.state.timestamp
+                },
+                document.title,
+                backUrl
+              );
+            }
+          });
+        }
+
+        function updateCanonicalURL(url) {
+          // Update canonical URL
+          const canonicalLink = document.querySelector('link[rel="canonical"]');
+          if (canonicalLink) {
+            canonicalLink.href = url;
+          }
+          
+          // Update Open Graph URL
+          const ogUrl = document.getElementById('og-url');
+          if (ogUrl) {
+            ogUrl.content = url;
+          }
+        }
+
+        function showLoading() {
+          blogPost.innerHTML = `
+            <div class="loading-spinner">
+              <div class="spinner"></div>
+              <p>Loading post...</p>
+            </div>
+          `;
+        }
+
+        function showError(message) {
+          blogPost.innerHTML = `
+            <div class="error-message">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>${message}</h3>
+              <a href="blog.html" class="btn">← Return to Blog</a>
+            </div>
+          `;
+        }
+
+        function executeScriptsFromContent(content) {
+          // Create a temporary div to parse the content
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = content;
+          
+          // Extract and execute scripts FIRST
+          const scripts = tempDiv.querySelectorAll('script');
+          scripts.forEach(script => {
+            const newScript = document.createElement('script');
+            Array.from(script.attributes).forEach(attr => {
+              newScript.setAttribute(attr.name, attr.value);
+            });
+            newScript.textContent = script.textContent;
+            
+            // Add to body to execute
+            document.body.appendChild(newScript);
+            document.body.removeChild(newScript);
+            
+            // Remove script from content
+            script.remove();
+          });
+          
+          // Extract and inject style tags into head
+          const styles = tempDiv.querySelectorAll('style');
+          styles.forEach(style => {
+            const newStyle = document.createElement('style');
+            newStyle.textContent = style.textContent;
+            document.head.appendChild(newStyle);
+            style.remove();
+          });
+          
+          // Return cleaned HTML (without scripts and styles)
+          return tempDiv.innerHTML;
+        }
+
+        function renderPost(post) {
+          // Clean the content by extracting scripts and styles
+          const cleanedContent = executeScriptsFromContent(post.content);
+          
+          // Render the HTML content WITHOUT scripts and styles
+          blogPost.innerHTML = `
+            <div class="blog-split-layout">
+              <div class="blog-image-side">
+                <div class="blog-image-container">
+                  ${post.image ? `<img src="${post.image}" alt="${post.title}" onerror="this.src='images/blog-placeholder.jpg'">` : 
+                    `<img src="images/blog-placeholder.jpg" alt="Blog post image">`}
+                </div>
+              </div>
+              <div class="blog-content-side">
+                <header class="post-header">
+                  <h1 class="post-title">${post.title}</h1>
+                  <div class="post-meta">
+                    ${post.created_at ? new Date(post.created_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' }) : ''}
+                  </div>
+                </header>
+                <div class="post-content-wrapper">
+                  <div class="post-content">
+                    ${cleanedContent}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          // Update SEO meta tags
+          updateMetaTags(post);
+          
+          // Initialize any dynamic functionality (like FAQ toggle)
+          initBlogFunctionality();
+        }
+        
+        function initBlogFunctionality() {
+          // This function initializes any interactive elements in the blog content
+          setTimeout(() => {
+            // FAQ toggle functionality
+            const faqItems = document.querySelectorAll('.faq-item');
+            if (faqItems.length > 0) {
+              faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                if (question) {
+                  question.addEventListener('click', () => {
+                    // Close other open items
+                    faqItems.forEach(otherItem => {
+                      if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                      }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                  });
+                }
+              });
+              
+              // Open first FAQ by default
+              if (faqItems.length > 0) {
+                faqItems[0].classList.add('active');
+              }
+            }
+            
+            // Any other blog-specific functionality can go here
+          }, 100);
+        }
+
+        function updateMetaTags(post) {
+          const currentUrl = window.location.href;
+          
+          // Update page title
+          document.title = `${post.title} - OceanArc Exim Blog`;
+          
+          // Update meta description
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) {
+            metaDesc.content = post.excerpt || post.content.substring(0, 160);
+          }
+          
+          // Update Open Graph tags
+          document.getElementById('og-title').content = post.title;
+          document.getElementById('og-desc').content = post.excerpt || post.content.substring(0, 200);
+          document.getElementById('og-url').content = currentUrl;
+          
+          if (post.image) {
+            document.getElementById('og-image').content = post.image;
+            document.getElementById('tw-image').content = post.image;
+          }
+          
+          // Update Twitter tags
+          document.getElementById('tw-title').content = post.title;
+          document.getElementById('tw-desc').content = post.excerpt || post.content.substring(0, 200);
+          
+          // Update canonical URL if not already updated
+          const canonicalLink = document.querySelector('link[rel="canonical"]');
+          if (canonicalLink) {
+            canonicalLink.href = currentUrl;
+          }
+          
+          // Update JSON-LD
+          const jsonLd = document.getElementById('blog-json-ld');
+          const jsonData = JSON.parse(jsonLd.textContent);
+          jsonData.headline = post.title;
+          jsonData.description = post.excerpt || post.content.substring(0, 200);
+          jsonData.url = currentUrl;
+          
+          if (post.image) {
+            jsonData.image = post.image;
+          }
+          if (post.created_at) {
+            jsonData.datePublished = post.created_at.replace(' ', 'T') + '+05:30';
+            jsonData.dateModified = post.updated_at ? post.updated_at.replace(' ', 'T') + '+05:30' : jsonData.datePublished;
+          }
+          jsonLd.textContent = JSON.stringify(jsonData);
+        }
+
+        function initScrollBehavior() {
+          const imageSide = document.querySelector('.blog-image-side');
+          const contentSide = document.querySelector('.blog-content-side');
+          const footer = document.querySelector('footer');
+          
+          if (!imageSide || !contentSide || !footer) {
+            console.log('Required elements not found for scroll behavior');
+            return;
+          }
+          
+          // Force the sticky positioning
+          imageSide.style.position = 'sticky';
+          imageSide.style.top = '100px';
+          imageSide.style.zIndex = '10';
+          
+          function updateScrollPosition() {
+            const scrollPosition = window.scrollY;
+            const headerHeight = 100;
+            const footerOffset = footer.offsetTop;
+            const imageHeight = imageSide.offsetHeight;
+            const contentBottom = contentSide.offsetTop + contentSide.offsetHeight;
+            
+            // Calculate the maximum scroll position where image should stop being sticky
+            const maxScrollPosition = Math.min(footerOffset - imageHeight - 100, contentBottom - imageHeight - 100);
+            
+            // Only apply scroll behavior on larger screens
+            if (window.innerWidth > 992) {
+              if (scrollPosition > headerHeight) {
+                // If we haven't reached the bottom of the content
+                if (scrollPosition < maxScrollPosition) {
+                  // Keep the image sticky
+                  imageSide.style.position = 'sticky';
+                  imageSide.style.top = '100px';
+                } else {
+                  // Stop the sticky behavior and let the image scroll normally
+                  imageSide.style.position = 'relative';
+                  imageSide.style.top = 'auto';
+                }
+              } else {
+                // Reset to initial state when at the top
+                imageSide.style.position = 'sticky';
+                imageSide.style.top = '100px';
+              }
+            } else {
+              // Reset for mobile
+              imageSide.style.position = 'static';
+              imageSide.style.top = 'auto';
+            }
+          }
+          
+          // Initial call
+          updateScrollPosition();
+          
+          // Throttled scroll event
+          let scrollTimeout;
+          window.addEventListener('scroll', function() {
+            if (!scrollTimeout) {
+              scrollTimeout = setTimeout(function() {
+                scrollTimeout = null;
+                updateScrollPosition();
+              }, 16); // ~60fps
+            }
+          });
+          
+          // Recalculate on resize
+          window.addEventListener('resize', function() {
+            setTimeout(updateScrollPosition, 100);
+          });
+          
+          // Recalculate when images load
+          const images = document.querySelectorAll('img');
+          images.forEach(img => {
+            img.addEventListener('load', function() {
+              setTimeout(updateScrollPosition, 100);
+            });
+          });
+        }
+      });
+    </script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DRQ6JEZ7NY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-DRQ6JEZ7NY');
+</script>
+  </body>
+</html>

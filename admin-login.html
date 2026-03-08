@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - OceanArc Exim</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="images/logo.png" type="image/png">
+  <style>
+    .admin-login {
+      max-width: 500px;
+      margin: 100px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-login h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--primary-color);
+    }
+    
+    .admin-login .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .admin-login label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    
+    .admin-login input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .login-btn:hover {
+      background-color: var(--secondary-color);
+    }
+    
+    .error-message {
+      color: #dc3545;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header (same as index.html) -->
+  <header>
+    <div class="container header-container">
+      <div class="logo">
+        Ocean<span>Arc</span> Exim
+        <div class="tagline">Connect the world, seamlessly</div>
+      </div>
+      <button class="nav-toggle" id="navToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      <nav id="mainNav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="index.html#products">Products</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+          <li><a href="admin-login.html" class="admin-link">Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Admin Login Form -->
+  <main class="container">
+    <div class="admin-login">
+      <h2>Admin Login</h2>
+      <form id="loginForm" action="php/login.php" method="POST">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="login-btn">Login</button>
+        <div id="errorMessage" class="error-message"></div>
+      </form>
+    </div>
+  </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-container">
+          <div class="footer-column">
+            <h3>OceanArc Exim</h3>
+            <p>
+              Connect the world, seamlessly through quality agriculture products
+              and global trade solutions.
+            </p>
+            <div class="social-links">
+              <a
+                href="https://www.facebook.com/profile.php?id=61581010155384"
+                target="_blank"
+                ><i class="fab fa-facebook-f"></i
+              ></a>
+              <a href="https://x.com/oceanarcexim" target="_blank"
+                ><i class="fab fa-x-twitter"></i
+              ></a>
+              <a
+                href="https://www.linkedin.com/company/oceanarc-exim/"
+                target="_blank"
+                ><i class="fab fa-linkedin-in"></i
+              ></a>
+              <a href="https://www.instagram.com/oceanarcexim/" target="_blank"
+                ><i class="fab fa-instagram"></i
+              ></a>
+            </div>
+          </div>
+          <div class="footer-column">
+            <h3>Quick Links</h3>
+            <ul class="footer-links">
+              <li><a href="https://oceanarcexim.com/">Home</a></li>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="service.html">Services</a></li>
+              <li><a href="agro-products.html">Products</a></li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Products</h3>
+            <ul class="footer-links">
+              <li>
+                <a href="https://oceanarcexim.com/agro-single.html?basmati-rice"
+                  >Rice</a
+                >
+              </li>
+              <li>
+                <a href="https://oceanarcexim.com/agro-single.html?id=17"
+                  >Wheat</a
+                >
+              </li>
+              <li>
+                <a href="https://oceanarcexim.com/agro-single.html?moringa-powder"
+                  >Moringa Powder</a
+                >
+              </li>
+              <li>
+                <a href="https://oceanarcexim.com/agro-single.html?pulses"
+                  >Pulses</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Contact Us</h3>
+            <ul class="contact-info">
+              <li>
+                <a
+                  href="https://www.google.com/maps?q=Surat,+Gujarat,+India"
+                  target="_blank"
+                  style="text-decoration: none; color: inherit"
+                >
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span>Surat, Gujarat, India</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="tel:+917096200535"
+                  style="text-decoration: none; color: inherit"
+                >
+                  <i class="fas fa-phone-alt"></i>
+                  <span>+91 70962 00535</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:oceanarcexim@gmail.com"
+                  style="text-decoration: none; color: inherit"
+                >
+                  <i class="fas fa-envelope"></i>
+                  <span>oceanarcexim@gmail.com</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="copyright">
+          <p>&copy; 2025 OceanArc Exim. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+  <script src="js/admin-login.js"></script>
+</body>
+</html>

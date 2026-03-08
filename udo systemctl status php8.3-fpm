@@ -1,0 +1,22 @@
+[0;1;32m●[0m nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (]8;;file://oceanarc-data/usr/lib/systemd/system/nginx.service/usr/lib/systemd/system/nginx.service]8;;; [0;1;32menabled[0m; preset: [0;1;32menabled[0m)
+     Active: [0;1;32mactive (running)[0m since Sat 2025-11-22 13:01:54 UTC; 6s ago
+       Docs: ]8;;man:nginx(8)man:nginx(8)]8;;
+    Process: 3415347 ExecStartPre=/usr/sbin/nginx -t -q -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+    Process: 3415349 ExecStart=/usr/sbin/nginx -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+   Main PID: 3415350 (nginx)
+      Tasks: 2 (limit: 2320)
+     Memory: 8.7M (peak: 9.4M)
+        CPU: 75ms
+     CGroup: /system.slice/nginx.service
+             ├─[0;38;5;245m3415350 "nginx: master process /usr/sbin/nginx -g daemon on; master_process on;"[0m
+             └─[0;38;5;245m3415351 "nginx: worker process"[0m
+
+Nov 22 13:01:54 oceanarc-data systemd[1]: Starting nginx.service - A high performance web server and a reverse proxy server...
+Nov 22 13:01:54 oceanarc-data nginx[3415347]: 2025/11/22 13:01:54 [warn] 3415347#3415347: the "listen ... http2" directive is deprecated, use the "http2" directive instead in /etc/nginx/sites-enabled/oceanarcexim.com:3
+Nov 22 13:01:54 oceanarc-data nginx[3415347]: 2025/11/22 13:01:54 [warn] 3415347#3415347: the "listen ... http2" directive is deprecated, use the "http2" directive instead in /etc/nginx/sites-enabled/oceanarcexim.com:4
+Nov 22 13:01:54 oceanarc-data nginx[3415347]: 2025/11/22 13:01:54 [info] 3415347#3415347: Using 116KiB of shared memory for nchan in /etc/nginx/nginx.conf:123
+Nov 22 13:01:54 oceanarc-data nginx[3415347]: 2025/11/22 13:01:54 [info] 3415347#3415347: Using 131072KiB of shared memory for nchan in /etc/nginx/nginx.conf:123
+Nov 22 13:01:54 oceanarc-data nginx[3415349]: 2025/11/22 13:01:54 [warn] 3415349#3415349: the "listen ... http2" directive is deprecated, use the "http2" directive instead in /etc/nginx/sites-enabled/oceanarcexim.com:3
+Nov 22 13:01:54 oceanarc-data nginx[3415349]: 2025/11/22 13:01:54 [warn] 3415349#3415349: the "listen ... http2" directive is deprecated, use the "http2" directive instead in /etc/nginx/sites-enabled/oceanarcexim.com:4
+Nov 22 13:01:54 oceanarc-data systemd[1]: Started nginx.service - A high performance web server and a reverse proxy server.

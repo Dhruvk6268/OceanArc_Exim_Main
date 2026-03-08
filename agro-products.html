@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en" class="page-anim">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agriculture Products - OceanArc Exim | Rice, Pulses & More</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Explore OceanArc Exim's high-quality agriculture products like rice, pulses, garlic powder, and moringa powder. Premium global export solutions for businesses worldwide.">
+  <meta name="keywords" content="OceanArc Exim, agriculture products,Indian Exporter, Indian agriculture exporter , rice export, pulses export, garlic powder, moringa powder, global trade">
+  <link rel="canonical" href="https://oceanarcexim.com/agro-products.html">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Agriculture Products - OceanArc Exim">
+  <meta property="og:description" content="Premium agriculture products for global exports including rice, pulses, garlic powder, and moringa powder.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://oceanarcexim.com/agro-products.html">
+  <meta property="og:image" content="https://oceanarcexim.com/images/products-og-image.jpg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Agriculture Products - OceanArc Exim">
+  <meta name="twitter:description" content="High-quality agriculture products for global exports. Trusted by businesses worldwide.">
+  <meta name="twitter:image" content="https://oceanarcexim.com/images/products-og-image.jpg">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "OceanArc Exim Agriculture Products",
+    "description": "High-quality rice, pulses, garlic powder, moringa powder, and other agriculture products for global exports.",
+    "url": "https://oceanarcexim.com/agro-products.html",
+    "brand": {
+      "@type": "Organization",
+      "name": "OceanArc Exim",
+      "logo": "https://oceanarcexim.com/images/logo.svg",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61581010155384",
+        "https://x.com/oceanarcexim",
+        "https://www.linkedin.com/company/oceanarc-exim/",
+        "https://www.instagram.com/oceanarcexim/"
+      ]
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="images/logo.svg" type="image/svg+xml">
+
+  <style>
+    /* All Products Page */
+    .all-products-page {
+      padding: 60px 0;
+    }
+
+    .products-filter {
+      margin: 30px 0;
+      text-align: right;
+    }
+
+    .products-filter select {
+      padding: 8px 15px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      background-color: white;
+    }
+
+    .error-message {
+      text-align: center;
+      padding: 30px;
+      color: #dc3545;
+    }
+
+    .error-message i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+    
+    .all-products-page h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #01435b;
+      text-align: center;
+      margin: 20px 0;
+      line-height: 1.2;
+      font-family: 'Arial', sans-serif;
+      position: relative;
+    }
+
+    /* Underline Accent */
+    .all-products-page h1::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background-color: #f58220;
+      margin: 10px auto 0 auto;
+      border-radius: 2px;
+    }
+    
+    /* Hero Section */
+    .agro-hero {
+      position: relative;
+      min-height: clamp(440px, 72vh, 680px);
+      height: auto;
+      overflow: hidden;
+      margin-top: -28px;
+      padding: 86px 0 56px;
+    }
+
+    .agro-hero video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .agro-hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+
+    .agro-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 20px;
+      max-width: 800px;
+      min-height: clamp(300px, 56vh, 540px);
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      margin: 0 auto;
+    }
+
+    .agro-hero h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .agro-hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .agro-hero .hero-proof {
+      margin-top: 14px;
+    }
+    
+    /* Quality Assurance Section */
+    .quality-section {
+      padding: 80px 0;
+      background: #f0f7ff;
+    }
+
+    .quality-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .quality-card {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quality-card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, #00aaff, #0066cc);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .quality-card:hover:before {
+      transform: scaleX(1);
+    }
+
+    .quality-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 102, 204, 0.1);
+    }
+
+    .quality-icon {
+      font-size: 2.5rem;
+      color: #00aaff;
+      margin-bottom: 20px;
+    }
+
+    .quality-card h3 {
+      color: #003366;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+    
+    /* Process Section */
+    .process-section {
+      padding: 80px 0;
+      background: white;
+    }
+
+    .process-steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 50px;
+    }
+
+    .process-step {
+      flex: 1 1 200px;
+      text-align: center;
+      padding: 30px 20px;
+      background: white;
+      border-radius: 15px;
+      position: relative;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .process-step:hover {
+      background: #0066cc;
+      color: white;
+      transform: translateY(-10px);
+    }
+
+    .process-step:hover h3,
+    .process-step:hover .step-number {
+      color: white;
+    }
+    
+    .process-step:hover .step-number {
+      border: 2px solid white;
+    }
+    
+    .step-number {
+      width: 60px;
+      height: 60px;
+      border: 2px solid #0066cc;
+      color: #0066cc;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-weight: bold;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .process-step h3 {
+      color: #003366;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+      font-size: 1.2rem;
+    }
+    
+    /* FAQ Section */
+    .faq-section {
+      padding: 80px 0;
+      background: #f8fafc;
+    }
+    
+    .faq-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .faq-item {
+      margin-bottom: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      background: white;
+    }
+    
+    .faq-question {
+      padding: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      color: #003366;
+      background: white;
+      transition: all 0.3s ease;
+    }
+    
+    .faq-question:hover {
+      background: #f0f7ff;
+    }
+    
+    .faq-question i {
+      transition: transform 0.3s ease;
+    }
+    
+    .faq-question.active i {
+      transform: rotate(180deg);
+    }
+    
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    .faq-answer.open {
+      padding: 0 20px 20px;
+      max-height: 300px;
+    }
+    
+    /* CTA Section */
+    .agro-cta {
+      background: linear-gradient(135deg, #003366, #0066cc);
+      color: white;
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .agro-cta h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .agro-cta p {
+      max-width: 700px;
+      margin: 0 auto 30px;
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .agro-hero h1 {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .agro-hero {
+        min-height: 430px;
+        padding: 74px 0 36px;
+      }
+      
+      .agro-hero h1 {
+        font-size: 1.9rem;
+      }
+      
+      .agro-hero p {
+        font-size: 0.98rem;
+        margin-bottom: 16px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .agro-hero {
+        min-height: 390px;
+        padding: 68px 0 30px;
+      }
+      
+      .agro-hero h1 {
+        font-size: 1.7rem;
+      }
+
+      .agro-hero .hero-proof {
+        margin-top: 12px;
+      }
+    }
+  </style>
+</head>
+<body data-page="agro">
+     <div id="site-header"></div>
+  
+  <!-- Hero Section -->
+  <section class="agro-hero" id="home">
+    <video autoplay muted loop playsinline>
+      <source src="videos/AGRI.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="agro-hero-content">
+      <h1>Premium Agriculture Products</h1>
+      <p>Discover our high-quality agricultural commodities sourced directly from trusted farms and delivered worldwide</p>
+      <div class="hero-cta-group">
+        <a href="#products" class="btn">Explore Products</a>
+        <a href="contact.html" class="btn btn-outline-light" data-inquiry="Hello OceanArc Exim, I am interested in your agriculture products. Please share MOQ, price list, and delivery timeline for export.">Get Export Quote</a>
+      </div>
+      <p class="hero-proof"><i class="fas fa-check-circle"></i>Farm-direct sourcing | Batch-tested quality | Export paperwork support</p>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="products" id="products">
+    <div class="container">
+      <h1 style="
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #01435b;
+        text-align: center;
+        margin: 20px 0;
+        line-height: 1.2;
+        font-family: 'Arial', sans-serif;
+        position: relative;
+      ">
+        Agriculture Products
+      </h1>
+      <p style="
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight:700;
+        color: #333;
+        max-width: 800px;
+        margin: 0 auto 40px auto;
+        line-height: 1.6;
+      ">
+        Explore <span style="color: #0056B3;">Ocean</span><span style="color: #f58220;">Arc</span><span style="color: #0056B3;"> Exim</span> premium range of agriculture products for global export. Our offerings include rice, pulses, garlic powder, moringa powder, and more.
+      </p>
+      <div class="products-grid" id="productsContainer">
+        <!-- Products will be loaded here via JavaScript -->
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Loading products...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quality Assurance Section -->
+  <section class="quality-section" id="quality">
+    <div class="container">
+      <div class="section-title">
+        <h2>Our Quality Assurance</h2>
+        <p>We maintain the highest standards to ensure premium quality agricultural products</p>
+      </div>
+      <div class="quality-grid">
+        <div class="quality-card">
+          <div class="quality-icon">
+            <i class="fas fa-microscope"></i>
+          </div>
+          <h3>Rigorous Testing</h3>
+          <p>All products undergo comprehensive laboratory testing for purity, quality, and safety standards.</p>
+        </div>
+
+        <div class="quality-card">
+          <div class="quality-icon">
+            <i class="fas fa-certificate"></i>
+          </div>
+          <h3>Quality Certifications</h3>
+          <p>Our products comply with international quality standards and carry necessary certifications.</p>
+        </div>
+
+        <div class="quality-card">
+          <div class="quality-icon">
+            <i class="fas fa-seedling"></i>
+          </div>
+          <h3>Sustainable Sourcing</h3>
+          <p>We partner with farmers who practice sustainable agriculture and ethical farming methods.</p>
+        </div>
+
+        <div class="quality-card">
+          <div class="quality-icon">
+            <i class="fas fa-shipping-fast"></i>
+          </div>
+          <h3>Optimal Packaging</h3>
+          <p>Specialized packaging solutions to maintain product freshness during international transit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Export Process Section -->
+  <section class="process-section" id="process">
+    <div class="container">
+      <div class="section-title">
+        <h2>Our Export Process</h2>
+        <p>From sourcing to delivery, we ensure a seamless experience for our international clients</p>
+      </div>
+      <div class="process-steps">
+        <div class="process-step">
+          <div class="step-number">1</div>
+          <h3>Sourcing</h3>
+          <p>Direct sourcing from verified farms and suppliers across India</p>
+        </div>
+
+        <div class="process-step">
+          <div class="step-number">2</div>
+          <h3>Quality Check</h3>
+          <p>Rigorous quality inspection and laboratory testing</p>
+        </div>
+
+        <div class="process-step">
+          <div class="step-number">3</div>
+          <h3>Processing</h3>
+          <p>Modern processing facilities ensuring product integrity</p>
+        </div>
+
+        <div class="process-step">
+          <div class="step-number">4</div>
+          <h3>Packaging</h3>
+          <p>Specialized packaging for international shipping requirements</p>
+        </div>
+
+        <div class="process-step">
+          <div class="step-number">5</div>
+          <h3>Shipping</h3>
+          <p>Efficient logistics with tracking for timely global delivery</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="section-title">
+        <h2>Frequently Asked Questions</h2>
+        <p>Find answers to common questions about our agriculture products and export process</p>
+      </div>
+      
+      <div class="faq-container">
+        <!-- FAQ Item 1 -->
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>What quality standards do your agriculture products meet?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>All our agriculture products meet international quality standards including FSSAI, ISO, and other relevant certifications. We conduct regular quality checks and laboratory testing to ensure purity, safety, and compliance with destination country regulations.</p>
+          </div>
+        </div>
+        
+        <!-- FAQ Item 2 -->
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>What is the minimum order quantity for agriculture products?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Minimum order quantities vary by product. We offer flexibility to accommodate both small and large-scale orders. Contact our team with your specific requirements, and we'll provide customized solutions that match your business needs.</p>
+          </div>
+        </div>
+        
+        <!-- FAQ Item 3 -->
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>How do you ensure product freshness during international shipping?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>We use specialized packaging materials and techniques designed for agricultural products. Our packaging solutions include moisture barriers, temperature control where necessary, and proper ventilation to maintain product freshness throughout the shipping process.</p>
+          </div>
+        </div>
+        
+        <!-- FAQ Item 4 -->
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Do you offer organic agriculture products?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Yes, we offer a range of certified organic agriculture products. Our organic portfolio includes rice, pulses, and other staples that are grown without synthetic pesticides or fertilizers. All our organic products carry appropriate certifications.</p>
+          </div>
+        </div>
+        
+        <!-- FAQ Item 5 -->
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>What is your typical delivery timeline for international orders?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Delivery timelines depend on the destination, product type, and order quantity. Typically, orders are processed within 3-5 business days, with shipping times ranging from 15-30 days depending on the destination. We provide detailed timelines during the order confirmation process.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="agro-cta" id="contact">
+    <div class="container">
+      <h2>Ready to Source Premium Agriculture Products?</h2>
+      <p>Connect with us to explore our product catalog, request samples, or discuss custom requirements for your market</p>
+      <a href="contact.html" class="btn" data-inquiry="Hello OceanArc Exim, I want to source agriculture products for import. Please help with product options, MOQ, pricing, and shipment timeline.">Contact Us Today</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+      <div id="site-footer"></div>
+  
+      <script src="js/layout.js" defer></script>
+<script src="js/main.js" defer></script>
+  <script>
+    // Products page script with URL validation
+    document.addEventListener('DOMContentLoaded', function () {
+      // Validate URL first - prevent access with ID parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('id')) {
+        // Redirect to clean URL without ID parameter
+        window.location.href = window.location.pathname;
+        return;
+      }
+
+      const productsContainer = document.getElementById('productsContainer');
+
+      // Load all products
+      fetch('php/get-products.php')
+        .then(response => response.json())
+        .then(products => {
+          if (products.length > 0) {
+            renderProducts(products, productsContainer);
+          } else {
+            productsContainer.innerHTML = '<p>No products found.</p>';
+          }
+        })
+        .catch(error => {
+          console.error('Error loading products:', error);
+          productsContainer.innerHTML = `
+            <div class="error-message">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Error loading products. Please try again later.</h3>
+            </div>
+          `;
+        });
+
+     // In agro-products.html, update the renderProducts function:
+function renderProducts(products, container) {
+  container.innerHTML = '';
+
+  products.forEach(product => {
+    const productElement = document.createElement('div');
+    productElement.className = 'product-card';
+    
+    // Check if product has video
+    const hasVideo = product.video && product.video.trim() !== '';
+    const mediaContent = hasVideo ? 
+      `<video class="product-media" style="height:300px;" autoplay muted loop playsinline>
+         <source src="${product.video}" type="video/mp4">
+         Your browser does not support the video tag.
+       </video>` :
+      `<div class="product-image" style="height:300px; background-image: url('${product.image || 'images/product-placeholder.jpg'}')"></div>`;
+    
+    // Use slug for URL if available, otherwise fall back to ID
+    const productUrl = product.slug ? 
+      `agro-single.html?${encodeURIComponent(product.slug)}` : 
+      `agro-single.html?id=${product.id}`;
+    
+    productElement.innerHTML = `
+      <a href="${productUrl}" class="learn">
+        ${mediaContent}
+        <div class="product-content">
+          <h3>${product.title}</h3>
+          ${product.category ? `<span class="product-category">${product.category}</span>` : ''}
+          <p>${product.description || (product.content ? product.content.substring(0, 150) : '')}...</p>
+          <a href="${productUrl}" class="learn-more">View Details <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </a>
+    `;
+    container.appendChild(productElement);
+  });
+}
+
+      // FAQ functionality
+      const faqQuestions = document.querySelectorAll('.faq-question');
+      
+      faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+          const answer = question.nextElementSibling;
+          const isOpen = answer.classList.contains('open');
+          
+          // Close all answers
+          document.querySelectorAll('.faq-answer').forEach(ans => {
+            ans.classList.remove('open');
+          });
+          
+          document.querySelectorAll('.faq-question').forEach(q => {
+            q.classList.remove('active');
+          });
+          
+          // Open clicked answer if it was closed
+          if (!isOpen) {
+            answer.classList.add('open');
+            question.classList.add('active');
+          }
+        });
+      });
+    });
+  </script>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DRQ6JEZ7NY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-DRQ6JEZ7NY');
+  </script>
+</body>
+</html>

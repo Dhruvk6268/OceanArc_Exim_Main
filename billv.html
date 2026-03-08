@@ -1,0 +1,2359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OceanArc Exim Invoice & Salary Slip Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styling */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+        }
+
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            background: #f8f9fa;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #7f8c8d;
+            border-right: 1px solid #e9ecef;
+        }
+
+        .tab:last-child {
+            border-right: none;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
+        }
+
+        .tab.active {
+            background: #3498db;
+            color: white;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        .form-container.hidden {
+            display: none;
+        }
+
+        /* Common Form Styling */
+        .form-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-section h3 {
+            color: #2980b9;
+            margin-bottom: 12px;
+            font-size: 15px;
+            padding-left: 8px;
+            border-left: 3px solid #2980b9;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .product-section {
+            margin-top: 20px;
+        }
+
+        .product-row {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .product-row h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed #ccc;
+            font-size: 14px;
+        }
+
+        /* Salary Form Specific */
+        .salary-form .form-group {
+            min-width: 250px;
+        }
+
+        /* Common Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 130px;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #219653;
+        }
+
+        .btn-purple {
+            background: #9b59b6;
+            color: white;
+        }
+
+        .btn-purple:hover {
+            background: #8e44ad;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-secondary {
+            background: #7f8c8d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #636e72;
+        }
+
+        #addProductBtn {
+            padding: 7px 18px;
+            font-size: 12px;
+            min-width: auto;
+            margin-top: 8px;
+        }
+
+        .remove-product {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        .remove-product:hover {
+            background: #c0392b;
+        }
+
+        /* Output Containers */
+        .invoice-container, .salary-slip-container {
+            background: white;
+            padding: 30px;
+            border-radius: 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: none;
+            max-width: 800px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            font-size: 11px !important;
+        }
+
+        .salary-slip-container {
+            font-size: 14px !important;
+            max-width: 700px;
+        }
+
+        /* Invoice Specific Styling */
+        .company-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #000;
+        }
+
+        .company-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-placeholder {
+            width: 70px;
+            height: 70px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+            padding: 3px;
+        }
+
+        .logo-placeholder.has-logo {
+            border: none;
+            background: transparent;
+        }
+
+        .company-details {
+            flex: 1;
+        }
+
+        .company-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 2px;
+        }
+
+        .invoice-title {
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            text-decoration: underline;
+            text-transform: uppercase;
+        }
+
+        .salary-slip-title {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            text-transform: uppercase;
+        }
+
+        /* Invoice Main Table */
+        .invoice-main-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 10px;
+        }
+
+        .invoice-main-table td {
+            border: 1px solid #000;
+            padding: 5px;
+            vertical-align: top;
+        }
+
+        .section-label {
+            font-weight: bold;
+            background: #f0f0f0;
+        }
+
+        .field-block {
+            margin-bottom: 1px;
+            min-height: 15px;
+        }
+
+        /* Products Table */
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 10px;
+        }
+
+        .products-table th,
+        .products-table td {
+            border: 1px solid #000;
+            padding: 6px;
+            text-align: left;
+        }
+
+        .products-table th {
+            background: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background: #f0f0f0;
+        }
+
+        /* Amount in Words */
+        .amount-words {
+            margin: 15px 0;
+            padding: 8px;
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+            font-size: 11px;
+        }
+
+        /* Tax Table Styling */
+        .tax-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 10px;
+        }
+
+        .tax-table td {
+            border: 1px solid #000;
+            padding: 6px;
+            vertical-align: top;
+        }
+
+        .tax-breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+
+        .tax-breakdown-table tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tax-breakdown-table td {
+            padding: 3px 5px;
+            text-align: left;
+        }
+
+        .tax-breakdown-table tr:last-child {
+            border-bottom: 2px solid #000;
+        }
+
+        .tax-breakdown-table .total-row td {
+            font-weight: bold;
+            background: #f0f0f0;
+        }
+
+        /* Salary Table Styling */
+        .salary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .salary-table th,
+        .salary-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .salary-table th {
+            background: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .earnings-section td {
+            text-align: right;
+        }
+
+        /* Employee Info */
+        .employee-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .employee-info-left, .employee-info-right {
+            flex: 1;
+        }
+
+        .info-item {
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+        }
+
+        /* Common Elements */
+        .declaration {
+            margin-top: 15px;
+            font-size: 11px;
+            line-height: 1.3;
+        }
+
+        .signatory, .signatory-section {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 11px;
+        }
+
+        .signatory-section {
+            font-size: 14px;
+        }
+
+        .signatory-line {
+            margin-top: 40px;
+            border-top: 1px solid #000;
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        .computer-generated {
+            text-align: center;
+            margin-top: 15px;
+            color: #666;
+            font-style: italic;
+            font-size: 10px;
+            padding-top: 8px;
+            border-top: 1px solid #ccc;
+        }
+
+        /* Field label styling */
+        .field-label {
+            font-weight: bold;
+            display: inline-block;
+            min-width: 100px;
+            font-size: 10px;
+        }
+
+        .field-value {
+            display: inline-block;
+            font-size: 10px;
+        }
+
+        /* Logo upload */
+        .logo-upload-container {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border: 1px dashed #ccc;
+        }
+
+        .logo-preview {
+            max-width: 100px;
+            max-height: 100px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .logo-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Output buttons */
+        .invoice-buttons, .salary-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        /* Reference text styling */
+        .reference-text {
+            font-size: 13px;
+            color: #000;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* Quality Info */
+        .quality-info {
+            font-size: 11px;
+            color: #666;
+            margin-top: 3px;
+            font-style: italic;
+        }
+
+        /* Print styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .invoice-container, .salary-slip-container,
+            .invoice-container *, .salary-slip-container * {
+                visibility: visible;
+            }
+            .invoice-container, .salary-slip-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 15px;
+                box-shadow: none;
+                margin: 0;
+                border: none;
+            }
+            .invoice-container {
+                font-size: 10px !important;
+            }
+            .no-print, .invoice-buttons, .salary-buttons, .reference-text {
+                display: none !important;
+            }
+            @page {
+                margin: 0;
+                size: A4;
+            }
+            html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+        }
+
+        /* PDF specific styles */
+        .pdf-mode {
+            padding: 20px !important;
+            font-size: 10px !important;
+        }
+        .pdf-mode .invoice-main-table td {
+            padding: 3px !important;
+        }
+        .pdf-mode .products-table th,
+        .pdf-mode .products-table td {
+            padding: 4px !important;
+        }
+        .pdf-mode .company-header {
+            margin-bottom: 15px !important;
+        }
+        .pdf-mode .invoice-title {
+            margin: 15px 0 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>OceanArc Exim Generator</h1>
+            <p>Invoice & Salary Slip Generator</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab active" id="invoiceTab">Invoice Generator</button>
+            <button class="tab" id="salaryTab">Salary Slip Generator</button>
+        </div>
+
+        <!-- Invoice Form -->
+        <div id="invoiceForm" class="form-container">
+            <!-- Invoice form content remains the same -->
+            <div class="form-section">
+                <h3>Logo Upload</h3>
+                <div class="logo-upload-container">
+                    <input type="file" id="logoUpload" accept="image/*">
+                    <div class="logo-preview" id="logoPreview"></div>
+                    <small>Upload your company logo (optional)</small>
+                </div>
+
+                <h3>Company Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="companyName">Company Name</label>
+                        <input type="text" id="companyName" placeholder="e.g., OceanArc Exim">
+                    </div>
+                    <div class="form-group">
+                        <label for="stateName">State Name</label>
+                        <input type="text" id="stateName" placeholder="e.g., Gujarat" value="Gujarat">
+                    </div>
+                    <div class="form-group">
+                        <label for="stateCode">State Code</label>
+                        <input type="text" id="stateCode" placeholder="e.g., 24" value="24">
+                    </div>
+                    <div class="form-group">
+                        <label for="gstNumber">GST Number</label>
+                        <input type="text" id="gstNumber" placeholder="e.g., 24ILAPD9761E125">
+                        <p class="reference-text">OceanArc Exim = 24ILAPD9761E1Z5<br>ARTISANRINGS = 24IRIPM1646D1ZU</p>
+                    </div>
+                </div>
+
+                <h3>Bank & Tax Details</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bankName">Bank Name</label>
+                        <input type="text" id="bankName" placeholder="e.g., Punjab National Bank">
+                    </div>
+                    <div class="form-group">
+                        <label for="bankAccount">Bank Account Number</label>
+                        <input type="text" id="bankAccount" placeholder="e.g., 9727002100003708">
+                    </div>
+                    <div class="form-group">
+                        <label for="bankIFSC">Bank IFSC Code</label>
+                        <input type="text" id="bankIFSC" placeholder="e.g., PUNB0972700">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cgstRate">CGST Rate %</label>
+                        <input type="number" id="cgstRate" placeholder="1.5" step="0.01" value="1.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="sgstRate">SGST Rate %</label>
+                        <input type="number" id="sgstRate" placeholder="1.5" step="0.01" value="1.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="invoicePdfQuality">PDF Quality</label>
+                        <select id="invoicePdfQuality">
+                            <option value="0.1">10% - Smallest File (Lowest Quality)</option>
+                            <option value="0.5">50% - Small File (Low Quality)</option>
+                            <option value="0.75">75% - Medium File (Good Quality)</option>
+                            <option value="0.8">80% - Good File (Very Good Quality)</option>
+                            <option value="0.9" selected>90% - Large File (Excellent Quality)</option>
+                            <option value="1.0">100% - Largest File (Best Quality)</option>
+                        </select>
+                        <div class="quality-info">Higher quality = larger file size</div>
+                    </div>
+                </div>
+
+                <h3>Signatory Details</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="signatoryName">Authorised Signatory Name</label>
+                        <input type="text" id="signatoryName" placeholder="e.g., John Doe">
+                        <div class="quality-info">Leave blank for "Authorised Signatory" only</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Invoice Details</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="invoiceNumber">Invoice Number</label>
+                        <input type="text" id="invoiceNumber" placeholder="e.g., INV-001">
+                    </div>
+                    <div class="form-group">
+                        <label for="invoiceDate">Invoice Date</label>
+                        <input type="date" id="invoiceDate">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Consignee Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="consigneeName">Consignee Name</label>
+                        <input type="text" id="consigneeName" placeholder="e.g., Emily Smith">
+                    </div>
+                    <div class="form-group">
+                        <label for="consigneeState">Consignee State</label>
+                        <input type="text" id="consigneeState" placeholder="e.g., Ogden">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Buyer Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="buyerName">Buyer Name</label>
+                        <input type="text" id="buyerName" placeholder="e.g., Emily Smith">
+                    </div>
+                    <div class="form-group">
+                        <label for="buyerState">Buyer State</label>
+                        <input type="text" id="buyerState" placeholder="e.g., Ogden">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="buyerAddress">Buyer Address</label>
+                        <textarea id="buyerAddress" placeholder="Enter buyer's complete address"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Additional Invoice Fields</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Buyer's Order No.</label>
+                        <input type="text" id="buyersOrderNo" placeholder="Buyer's order number">
+                    </div>
+                    <div class="form-group">
+                        <label>Dispatch Doc No.</label>
+                        <input type="text" id="dispatchDocNo" placeholder="Dispatch document number">
+                    </div>
+                    <div class="form-group">
+                        <label>Delivery Note Date</label>
+                        <input type="text" id="deliveryNoteDate" placeholder="DD-MMM-YYYY">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Dispatched through</label>
+                        <input type="text" id="dispatchedThrough" placeholder="e.g., DHL, FedEx">
+                    </div>
+                    <div class="form-group">
+                        <label>Vessel/Flight No.</label>
+                        <input type="text" id="vesselFlightNo" placeholder="Vessel or flight number">
+                    </div>
+                    <div class="form-group">
+                        <label>City/Port of Loading</label>
+                        <input type="text" id="cityPortLoading" placeholder="e.g., Mumbai Port">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Place of receipt by shipper</label>
+                        <input type="text" id="placeReceipt" placeholder="Place of receipt">
+                    </div>
+                    <div class="form-group">
+                        <label>City/Port of Discharge</label>
+                        <input type="text" id="cityPortDischarge" placeholder="Port of discharge">
+                    </div>
+                    <div class="form-group">
+                        <label>Destination</label>
+                        <input type="text" id="destination" placeholder="Final destination">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Dated</label>
+                        <input type="text" id="dated" placeholder="DD-MMM-YYYY">
+                    </div>
+                    <div class="form-group">
+                        <label>Delivery Note</label>
+                        <input type="text" id="deliveryNote" placeholder="Delivery note details">
+                    </div>
+                    <div class="form-group">
+                        <label>Reference No. & Date.</label>
+                        <input type="text" id="referenceNo" placeholder="Reference number and date">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Mode/Terms of Payment</label>
+                        <input type="text" id="modePayment" placeholder="e.g., Net 30, Advance">
+                    </div>
+                    <div class="form-group">
+                        <label>Other References</label>
+                        <input type="text" id="otherReferences" placeholder="Any other references">
+                    </div>
+                    <div class="form-group">
+                        <label>Terms of Delivery</label>
+                        <input type="text" id="termsDelivery" placeholder="Delivery terms">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section product-section">
+                <h3>Product Details</h3>
+                <div id="productsContainer">
+                    <!-- Default product row -->
+                    <div class="product-row" data-index="0">
+                        <h4>Product #1</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <input type="text" class="product-desc" placeholder="e.g., RING">
+                            </div>
+                            <div class="form-group">
+                                <label>HSN/SAC Code</label>
+                                <input type="text" class="product-hsn" placeholder="e.g., 7117">
+                            </div>
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <input type="text" class="product-qty" placeholder="e.g., 1 PIECE">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Rate (with GST included)</label>
+                                <input type="number" class="product-rate" placeholder="0.00" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Unit</label>
+                                <input type="text" class="product-unit" placeholder="e.g., PIECE">
+                            </div>
+                            <div class="form-group">
+                                <label>Discount %</label>
+                                <input type="number" class="product-discount" placeholder="0" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Amount (with GST)</label>
+                                <input type="number" class="product-amount" readonly placeholder="Auto-calculated">
+                            </div>
+                        </div>
+                        <button type="button" class="remove-product">Remove Product</button>
+                    </div>
+                </div>
+                <button type="button" id="addProductBtn" class="btn-purple">+ Add Another Product</button>
+            </div>
+
+            <div class="action-buttons">
+                <button id="invoiceGenerateBtn" class="btn-primary">Generate Invoice</button>
+                <button id="invoiceResetBtn" class="btn-danger">Reset Form</button>
+            </div>
+        </div>
+
+        <!-- Salary Slip Form -->
+        <div id="salaryForm" class="form-container hidden">
+            <!-- Salary form content remains the same -->
+            <div class="form-section">
+                <h3>Company Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="salaryCompanyName">Company Name</label>
+                        <input type="text" id="salaryCompanyName" placeholder="e.g., OceanArc Exim" value="OceanArc Exim">
+                    </div>
+                    <div class="form-group">
+                        <label for="monthYear">Month & Year</label>
+                        <input type="text" id="monthYear" placeholder="e.g., November-2025" value="November-2025">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Employee Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="empCode">Employee Code</label>
+                        <input type="text" id="empCode" placeholder="e.g., Empcode2" value="Empcode2">
+                    </div>
+                    <div class="form-group">
+                        <label for="empName">Employee Name</label>
+                        <input type="text" id="empName" placeholder="e.g., Hasti Khokhar" value="Hasti Khokhar">
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <input type="text" id="department" placeholder="e.g., Sales & Marketing" value="Sales & Marketing">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="designation">Designation</label>
+                        <input type="text" id="designation" placeholder="e.g., Sales Executive" value="Sales Executive">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Earnings & Deductions</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="basicSalary">Basic Salary</label>
+                        <input type="number" id="basicSalary" placeholder="0.00" step="0.01" value="7640">
+                    </div>
+                    <div class="form-group">
+                        <label for="securityDeposit">Security Deposit</label>
+                        <input type="number" id="securityDeposit" placeholder="0.00" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="securityReturn">Security Deposit Return</label>
+                        <input type="number" id="securityReturn" placeholder="0.00" step="0.01" value="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="withdrawal">Withdrawal</label>
+                        <input type="number" id="withdrawal" placeholder="0.00" step="0.01" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>PDF Settings</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="salaryPdfQuality">PDF Quality</label>
+                        <select id="salaryPdfQuality">
+                            <option value="0.1">10% - Smallest File (Lowest Quality)</option>
+                            <option value="0.5">50% - Small File (Low Quality)</option>
+                            <option value="0.75">75% - Medium File (Good Quality)</option>
+                            <option value="0.8">80% - Good File (Very Good Quality)</option>
+                            <option value="0.9" selected>90% - Large File (Excellent Quality)</option>
+                            <option value="1.0">100% - Largest File (Best Quality)</option>
+                        </select>
+                        <div class="quality-info">Higher quality = larger file size</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="salaryGenerateBtn" class="btn-primary">Generate Salary Slip</button>
+                <button id="salaryResetBtn" class="btn-danger">Reset Form</button>
+            </div>
+        </div>
+
+        <!-- Invoice Output -->
+        <div id="invoiceContainer" class="invoice-container">
+            <!-- Invoice output content remains the same -->
+            <!-- Company Header with Logo -->
+            <div class="company-header">
+                <div class="company-logo-section">
+                    <div class="logo-placeholder" id="invoiceLogo">
+                        Company Logo
+                    </div>
+                    <div class="company-details">
+                        <div class="company-name" id="billCompanyName">Company Name</div>
+                        <div>State Name : <span id="billStateName">-</span>, Code : <span id="billStateCode">-</span></div>
+                        <div>GST: <span id="billGST">-</span></div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div><strong>Invoice No.</strong> <span id="billInvoiceNumber">-</span></div>
+                    <div><strong>Dated</strong> <span id="billInvoiceDate">-</span></div>
+                </div>
+            </div>
+
+            <!-- Invoice Title -->
+            <div class="invoice-title">INVOICE</div>
+
+            <!-- Main Invoice Table -->
+            <table class="invoice-main-table">
+                <!-- Row 1: Consignee, Invoice No., Dated -->
+                <tr>
+                    <td style="width: 40%;">
+                        <div class="field-block">
+                            <span class="field-label">Consignee(Ship to):</span>
+                        </div>
+                        <div style="padding-left: 10px;">
+                            <div class="field-block"><strong id="billConsigneeName">-</strong></div>
+                            <div class="field-block">State Name : <span id="billConsigneeState">-</span></div>
+                        </div>
+                    </td>
+                    <td style="width: 30%;">
+                        <div class="field-block">
+                            <span class="field-label">Invoice No.:</span>
+                            <span class="field-value" id="billInvoiceNumber2">-</span>
+                        </div>
+                    </td>
+                    <td style="width: 30%;">
+                        <div class="field-block">
+                            <span class="field-label">Dated:</span>
+                            <span class="field-value" id="billInvoiceDate2">-</span>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Row 2: Delivery Note, Mode/Terms of Payment -->
+                <tr>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">Delivery Note:</span>
+                            <span class="field-value" id="billDeliveryNote">-</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">Mode/Terms of Payment:</span>
+                            <span class="field-value" id="billModePayment">-</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">Other References:</span>
+                            <span class="field-value" id="billOtherReferences">-</span>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Row 3: Reference No., Buyer's Order No. -->
+                <tr>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">Reference No. & Date.:</span>
+                            <span class="field-value" id="billReferenceNo">-</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">Buyer's Order No.:</span>
+                            <span class="field-value" id="billBuyersOrderNo">-</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">Dated:</span>
+                            <span class="field-value" id="billDated2">-</span>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Row 4: Dispatch Details -->
+                <tr>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">Dispatch Doc No.:</span>
+                            <span class="field-value" id="billDispatchDocNo">-</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">Delivery Note Date:</span>
+                            <span class="field-value" id="billDeliveryNoteDate">-</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">Dispatched through:</span>
+                            <span class="field-value" id="billDispatchedThrough">-</span>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Row 5: Vessel/Flight, Destination -->
+                <tr>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">Vessel/Flight No.:</span>
+                            <span class="field-value" id="billVesselFlightNo">-</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">Destination:</span>
+                            <span class="field-value" id="billDestination">-</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">Place of receipt by shipper:</span>
+                            <span class="field-value" id="billPlaceReceipt">-</span>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Row 6: Port Details -->
+                <tr>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">City/Port of Loading:</span>
+                            <span class="field-value" id="billCityPortLoading">-</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">City/Port of Discharge:</span>
+                            <span class="field-value" id="billCityPortDischarge">-</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="field-block">
+                            <span class="field-label">Dated:</span>
+                            <span class="field-value" id="billDated">-</span>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Row 7: Buyer and Terms of Delivery -->
+                <tr>
+                    <td colspan="2" style="vertical-align: top;">
+                        <div class="field-block">
+                            <span class="field-label">Buyer(Bill to):</span>
+                        </div>
+                        <div style="padding-left: 10px;">
+                            <div class="field-block"><strong id="billBuyerName">-</strong></div>
+                            <div class="field-block" id="billBuyerAddress">-</div>
+                            <div class="field-block">State Name : <span id="billBuyerState">-</span></div>
+                        </div>
+                    </td>
+                    <td style="vertical-align: top;">
+                        <div class="field-block">
+                            <span class="field-label">Terms of Delivery:</span>
+                            <span class="field-value" id="billTermsDelivery">-</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Products Table -->
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>Si No</th>
+                        <th>Description of Goods</th>
+                        <th>HSN/SAC</th>
+                        <th>Quantity</th>
+                        <th>Rate (with GST)</th>
+                        <th>per</th>
+                        <th>Disc. %</th>
+                        <th>Amount (with GST)</th>
+                    </tr>
+                </thead>
+                <tbody id="billProductsBody">
+                    <!-- Products will be inserted here -->
+                    <tr>
+                        <td colspan="8" style="text-align: center;">No products added</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="3">Total</td>
+                        <td id="billTotalQuantity">-</td>
+                        <td colspan="3"></td>
+                        <td id="billTotalAmount">0.00</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <!-- Amount in Words - Updated to show FINAL AMOUNT -->
+            <div class="amount-words">
+                <div><strong>Total Amount (in words)</strong></div>
+                <div><strong id="billAmountWords">INR Zero Only</strong></div>
+                <div><strong>E & O.E</strong></div>
+            </div>
+
+            <!-- Tax Calculation Table - Simplified without TCS -->
+            <table class="tax-table">
+                <tr>
+                    <td style="width: 60%;">
+                        <div class="field-block">
+                            <strong>Bank Name:</strong> <span id="billBankName">-</span>
+                        </div>
+                        <div class="field-block">
+                            <strong>Bank A/C:</strong> <span id="billBankAccount">-</span>
+                            <strong style="margin-left: 20px;">Bank IFSC:</strong> <span id="billBankIFSC">-</span>
+                        </div>
+                    </td>
+                    <td style="width: 40%;">
+                        <table class="tax-breakdown-table">
+                            <tr>
+                                <td>Total Amount before Tax</td>
+                                <td id="billTotalBeforeTax">0.00</td>
+                            </tr>
+                            <tr>
+                                <td>CGST <span id="billCgstRate">1.5</span>%</td>
+                                <td id="billCGST">0.00</td>
+                            </tr>
+                            <tr>
+                                <td>SGST <span id="billSgstRate">1.5</span>%</td>
+                                <td id="billSGST">0.00</td>
+                            </tr>
+                            <tr>
+                                <td>Total Tax Amount</td>
+                                <td id="billTotalTax">0.00</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td><strong>Total Amount (Final)</strong></td>
+                                <td><strong id="billTotalAfterTax">0.00</strong></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Declaration -->
+            <div class="declaration">
+                <strong>Declaration</strong><br>
+                We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.
+            </div>
+
+            <!-- Signatory -->
+            <div class="signatory">
+                <div id="billSignatoryName">
+                    <strong id="billSignatory">for Company Name</strong><br>
+                    Authorised Signatory
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="computer-generated">
+                This is a Computer Generated Invoice
+            </div>
+
+            <!-- Invoice Action Buttons -->
+            <div class="invoice-buttons no-print">
+                <button id="invoicePrintBtn" class="btn-success">Print Invoice</button>
+                <button id="invoiceSavePdfBtn" class="btn-purple">Save as PDF</button>
+                <button id="invoiceBackBtn" class="btn-secondary">Back to Form</button>
+            </div>
+        </div>
+
+        <!-- Salary Slip Output -->
+        <div id="salarySlipContainer" class="salary-slip-container">
+            <!-- Salary output content remains the same -->
+            <!-- Company Header -->
+            <div class="company-header">
+                <div class="company-name" id="slipCompanyName">OceanArc Exim</div>
+                <div id="slipMonthYear">PAY SLIP FOR THE MONTH OF November-2025</div>
+            </div>
+
+            <!-- Employee Information -->
+            <div class="employee-info">
+                <div class="employee-info-left">
+                    <div class="info-item">
+                        <span class="info-label">Empcode:</span>
+                        <span id="slipEmpCode">Empcode2</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Department:</span>
+                        <span id="slipDepartment">Sales & Marketing</span>
+                    </div>
+                </div>
+                <div class="employee-info-right">
+                    <div class="info-item">
+                        <span class="info-label">Emp.Name:</span>
+                        <span id="slipEmpName">Hasti Khokhar</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Designation:</span>
+                        <span id="slipDesignation">Sales Executive</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Salary Details Table -->
+            <table class="salary-table">
+                <thead>
+                    <tr>
+                        <th>Earning</th>
+                        <th>Amount (₹)</th>
+                    </tr>
+                </thead>
+                <tbody class="earnings-section">
+                    <tr>
+                        <td>Basic</td>
+                        <td id="slipBasicSalary">7,640.00</td>
+                    </tr>
+                    <tr>
+                        <td>Security Diposite</td>
+                        <td id="slipSecurityDeposit">0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Security Diposite Return</td>
+                        <td id="slipSecurityReturn">0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Withdrawal</td>
+                        <td id="slipWithdrawal">0.00</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td>Total Earning</td>
+                        <td id="slipTotalEarning">7,640.00</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>Net Payable</td>
+                        <td id="slipNetPayable">7,640.00</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <!-- Signatory Section -->
+            <div class="signatory-section">
+                <div>Authorised Sign.</div>
+            </div>
+            <div class="signatory-line"></div>
+
+            <!-- Salary Slip Action Buttons -->
+            <div class="salary-buttons no-print">
+                <button id="salaryPrintBtn" class="btn-success">Print Salary Slip</button>
+                <button id="salarySavePdfBtn" class="btn-purple">Save as PDF</button>
+                <button id="salaryBackBtn" class="btn-secondary">Back to Form</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include html2canvas and jsPDF libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        // Global variables for invoice generator
+        let productCounter = 1;
+        let logoImage = null;
+        const { jsPDF } = window.jspdf;
+
+        // Tab switching function
+        function switchTab(tab) {
+            // Hide all outputs first
+            document.getElementById('invoiceContainer').style.display = 'none';
+            document.getElementById('salarySlipContainer').style.display = 'none';
+            
+            // Update tab buttons
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                if ((tab === 'invoice' && t.textContent.includes('Invoice')) || 
+                    (tab === 'salary' && t.textContent.includes('Salary'))) {
+                    t.classList.add('active');
+                }
+            });
+
+            // Show/hide forms
+            if (tab === 'invoice') {
+                document.getElementById('invoiceForm').classList.remove('hidden');
+                document.getElementById('salaryForm').classList.add('hidden');
+            } else {
+                document.getElementById('invoiceForm').classList.add('hidden');
+                document.getElementById('salaryForm').classList.remove('hidden');
+            }
+        }
+
+        // Initialize today's date for invoice
+        function getTodayDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Setup all event listeners
+        function setupEventListeners() {
+            console.log('Setting up event listeners...');
+            
+            // Set default date for invoice
+            document.getElementById('invoiceDate').value = getTodayDate();
+            
+            // Initialize amount calculation for first invoice row
+            const firstRow = document.querySelector('.product-row');
+            if (firstRow) {
+                const rateInput = firstRow.querySelector('.product-rate');
+                const discountInput = firstRow.querySelector('.product-discount');
+
+                rateInput.addEventListener('input', () => calculateProductAmount(firstRow));
+                discountInput.addEventListener('input', () => calculateProductAmount(firstRow));
+                calculateProductAmount(firstRow);
+            }
+
+            // Tab switching
+            document.getElementById('invoiceTab').addEventListener('click', function() {
+                switchTab('invoice');
+            });
+            
+            document.getElementById('salaryTab').addEventListener('click', function() {
+                switchTab('salary');
+            });
+
+            // ========== INVOICE EVENT LISTENERS ==========
+            // Logo upload
+            document.getElementById('logoUpload').addEventListener('change', handleLogoUpload);
+            
+            // Add product button
+            document.getElementById('addProductBtn').addEventListener('click', addProductRow);
+            
+            // Generate invoice button
+            document.getElementById('invoiceGenerateBtn').addEventListener('click', generateInvoice);
+            
+            // Print button
+            document.getElementById('invoicePrintBtn').addEventListener('click', printInvoice);
+            
+            // Save PDF button
+            document.getElementById('invoiceSavePdfBtn').addEventListener('click', saveInvoiceAsPdf);
+            
+            // Back button
+            document.getElementById('invoiceBackBtn').addEventListener('click', function() {
+                document.getElementById('invoiceForm').classList.remove('hidden');
+                document.getElementById('invoiceContainer').style.display = 'none';
+                switchTab('invoice');
+            });
+            
+            // Reset button
+            document.getElementById('invoiceResetBtn').addEventListener('click', resetInvoiceForm);
+
+            // Remove product buttons
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-product')) {
+                    removeProductRow(e.target);
+                }
+            });
+
+            // ========== SALARY EVENT LISTENERS ==========
+            // Generate salary slip button
+            document.getElementById('salaryGenerateBtn').addEventListener('click', generateSalarySlip);
+            
+            // Print button
+            document.getElementById('salaryPrintBtn').addEventListener('click', printSalarySlip);
+            
+            // Save PDF button
+            document.getElementById('salarySavePdfBtn').addEventListener('click', saveSalaryAsPdf);
+            
+            // Back button
+            document.getElementById('salaryBackBtn').addEventListener('click', function() {
+                document.getElementById('salaryForm').classList.remove('hidden');
+                document.getElementById('salarySlipContainer').style.display = 'none';
+                switchTab('salary');
+            });
+            
+            // Reset button
+            document.getElementById('salaryResetBtn').addEventListener('click', resetSalaryForm);
+        }
+
+        // ============================================
+        // INVOICE GENERATOR FUNCTIONS
+        // ============================================
+
+        // Logo upload functionality
+        function handleLogoUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    logoImage = e.target.result;
+                    const preview = document.getElementById('logoPreview');
+                    preview.innerHTML = `<img src="${logoImage}" alt="Logo Preview">`;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Format date to DD-MMM-YY
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            try {
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) return '';
+                const day = date.getDate().toString().padStart(2, '0');
+                const month = date.toLocaleString('en-US', { month: 'short' });
+                const year = date.getFullYear().toString().slice(-2);
+                return `${day}-${month}-${year}`;
+            } catch (e) {
+                return '';
+            }
+        }
+
+        // Format number with commas
+        function formatNumber(num) {
+            if (!num && num !== 0) return '0.00';
+            return parseFloat(num).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Convert number to words - ENHANCED VERSION
+        function numberToWords(num) {
+            if (num === 0) return 'Zero Rupees Only';
+
+            const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+            const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+            const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+            const thousands = ['', 'Thousand', 'Lakh', 'Crore'];
+
+            let words = '';
+            let i = 0;
+
+            // Handle decimal part (paise)
+            let rupees = Math.floor(num);
+            let paise = Math.round((num % 1) * 100);
+
+            if (rupees === 0) {
+                words = 'Zero';
+            } else {
+                let tempRupees = rupees;
+                
+                // Handle crores
+                if (tempRupees >= 10000000) {
+                    const crores = Math.floor(tempRupees / 10000000);
+                    if (crores > 0) {
+                        words += getHundredsWords(crores) + ' Crore ';
+                        tempRupees %= 10000000;
+                    }
+                }
+                
+                // Handle lakhs
+                if (tempRupees >= 100000) {
+                    const lakhs = Math.floor(tempRupees / 100000);
+                    if (lakhs > 0) {
+                        words += getHundredsWords(lakhs) + ' Lakh ';
+                        tempRupees %= 100000;
+                    }
+                }
+                
+                // Handle thousands
+                if (tempRupees >= 1000) {
+                    const thousandsPart = Math.floor(tempRupees / 1000);
+                    if (thousandsPart > 0) {
+                        words += getHundredsWords(thousandsPart) + ' Thousand ';
+                        tempRupees %= 1000;
+                    }
+                }
+                
+                // Handle remaining hundreds
+                if (tempRupees > 0) {
+                    words += getHundredsWords(tempRupees) + ' ';
+                }
+            }
+
+            words = words.trim();
+
+            // Add paise if exists
+            let result = 'INR ' + words + ' Rupees';
+            if (paise > 0) {
+                result += ' and ' + paise + ' Paise';
+            }
+            result += ' Only';
+
+            return result;
+        }
+
+        // Helper function for hundreds conversion
+        function getHundredsWords(num) {
+            const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+            const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+            const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+            
+            let words = '';
+            
+            // Hundreds
+            if (num >= 100) {
+                words += ones[Math.floor(num / 100)] + ' Hundred ';
+                num %= 100;
+            }
+            
+            // Tens and ones
+            if (num >= 20) {
+                words += tens[Math.floor(num / 10)] + ' ';
+                num %= 10;
+                if (num > 0) {
+                    words += ones[num] + ' ';
+                }
+            } else if (num >= 10) {
+                words += teens[num - 10] + ' ';
+            } else if (num > 0) {
+                words += ones[num] + ' ';
+            }
+            
+            return words.trim();
+        }
+
+        // Calculate amount for a product
+        function calculateProductAmount(row) {
+            const rate = parseFloat(row.querySelector('.product-rate').value) || 0;
+            const discount = parseFloat(row.querySelector('.product-discount').value) || 0;
+            const amount = rate - (rate * discount / 100);
+            row.querySelector('.product-amount').value = amount.toFixed(2);
+            return amount;
+        }
+
+        // Calculate GST and totals - SIMPLIFIED VERSION
+        function calculateTaxes(totalAmount) {
+            const cgstRate = parseFloat(document.getElementById('cgstRate').value) || 1.5;
+            const sgstRate = parseFloat(document.getElementById('sgstRate').value) || 1.5;
+            
+            // Calculate amount before tax (total GST rate = CGST + SGST)
+            const totalGSTRate = cgstRate + sgstRate;
+            const amountBeforeTax = totalAmount / (1 + totalGSTRate / 100);
+            
+            // Calculate tax amounts
+            const cgstAmount = (amountBeforeTax * cgstRate) / 100;
+            const sgstAmount = (amountBeforeTax * sgstRate) / 100;
+            const totalTax = cgstAmount + sgstAmount;
+            
+            return {
+                amountBeforeTax: amountBeforeTax,
+                cgstRate: cgstRate,
+                sgstRate: sgstRate,
+                cgstAmount: cgstAmount,
+                sgstAmount: sgstAmount,
+                totalTax: totalTax,
+                totalAfterTax: totalAmount // Total amount is the input amount with GST
+            };
+        }
+
+        // Update tax display in invoice
+        function updateTaxDisplay(taxData) {
+            document.getElementById('billTotalBeforeTax').textContent = formatNumber(taxData.amountBeforeTax);
+            document.getElementById('billCgstRate').textContent = taxData.cgstRate;
+            document.getElementById('billSgstRate').textContent = taxData.sgstRate;
+            document.getElementById('billCGST').textContent = formatNumber(taxData.cgstAmount);
+            document.getElementById('billSGST').textContent = formatNumber(taxData.sgstAmount);
+            document.getElementById('billTotalTax').textContent = formatNumber(taxData.totalTax);
+            document.getElementById('billTotalAfterTax').textContent = formatNumber(taxData.totalAfterTax);
+        }
+
+        // Add new product row
+        function addProductRow() {
+            productCounter++;
+            const container = document.getElementById('productsContainer');
+            const newRow = document.createElement('div');
+            newRow.className = 'product-row';
+            newRow.setAttribute('data-index', productCounter - 1);
+
+            newRow.innerHTML = `
+                <h4>Product #${productCounter}</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class="product-desc" placeholder="Product description">
+                    </div>
+                    <div class="form-group">
+                        <label>HSN/SAC Code</label>
+                        <input type="text" class="product-hsn" placeholder="HSN Code">
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="text" class="product-qty" placeholder="e.g., 2 PIECE">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Rate (with GST included)</label>
+                        <input type="number" class="product-rate" placeholder="0.00" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Unit</label>
+                        <input type="text" class="product-unit" placeholder="PIECE/KG/LOT">
+                    </div>
+                    <div class="form-group">
+                        <label>Discount %</label>
+                        <input type="number" class="product-discount" placeholder="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Amount (with GST)</label>
+                        <input type="number" class="product-amount" readonly placeholder="Auto-calculated">
+                    </div>
+                </div>
+                <button type="button" class="remove-product">Remove Product</button>
+            `;
+
+            container.appendChild(newRow);
+
+            // Add event listeners
+            const rateInput = newRow.querySelector('.product-rate');
+            const discountInput = newRow.querySelector('.product-discount');
+
+            rateInput.addEventListener('input', () => calculateProductAmount(newRow));
+            discountInput.addEventListener('input', () => calculateProductAmount(newRow));
+            calculateProductAmount(newRow);
+        }
+
+        // Remove product row
+        function removeProductRow(button) {
+            const row = button.closest('.product-row');
+            if (document.querySelectorAll('.product-row').length > 1) {
+                row.remove();
+                // Renumber products
+                const rows = document.querySelectorAll('.product-row');
+                rows.forEach((row, index) => {
+                    row.querySelector('h4').textContent = `Product #${index + 1}`;
+                });
+                productCounter = rows.length;
+            } else {
+                alert('At least one product is required.');
+            }
+        }
+
+        // Calculate totals
+        function calculateInvoiceTotals() {
+            const rows = document.querySelectorAll('.product-row');
+            let totalAmount = 0;
+
+            rows.forEach(row => {
+                const amount = parseFloat(row.querySelector('.product-amount').value) || 0;
+                totalAmount += amount;
+            });
+
+            return {
+                totalAmount: totalAmount,
+                totalQuantity: rows.length
+            };
+        }
+
+        // Generate Invoice
+        function generateInvoice() {
+            console.log('Generate invoice clicked');
+            
+            try {
+                // Update logo if uploaded - WITHOUT blue border
+                const logoPlaceholder = document.getElementById('invoiceLogo');
+                if (logoImage) {
+                    logoPlaceholder.innerHTML = `<img src="${logoImage}" alt="Company Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;">`;
+                    logoPlaceholder.style.background = 'transparent';
+                    logoPlaceholder.style.border = 'none';
+                    logoPlaceholder.style.padding = '0';
+                    logoPlaceholder.classList.add('has-logo');
+                } else {
+                    logoPlaceholder.innerHTML = 'Company Logo';
+                    logoPlaceholder.style.background = 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
+                    logoPlaceholder.style.border = '2px solid #3498db';
+                    logoPlaceholder.style.padding = '5px';
+                    logoPlaceholder.classList.remove('has-logo');
+                }
+
+                // Update company name and details
+                const companyName = document.getElementById('companyName').value || 'Company Name';
+                document.getElementById('billCompanyName').textContent = companyName;
+                
+                // Update signatory name
+                const signatoryName = document.getElementById('signatoryName').value || '';
+                if (signatoryName.trim() !== '') {
+                    document.getElementById('billSignatory').innerHTML = `for ${companyName}<br>${signatoryName}`;
+                } else {
+                    document.getElementById('billSignatory').innerHTML = `for ${companyName}`;
+                }
+
+                document.getElementById('billStateName').textContent = document.getElementById('stateName').value || '-';
+                document.getElementById('billStateCode').textContent = document.getElementById('stateCode').value || '-';
+                document.getElementById('billGST').textContent = document.getElementById('gstNumber').value || '-';
+
+                // Update invoice details
+                document.getElementById('billInvoiceNumber').textContent = document.getElementById('invoiceNumber').value || '-';
+                document.getElementById('billInvoiceNumber2').textContent = document.getElementById('invoiceNumber').value || '-';
+
+                const invoiceDate = document.getElementById('invoiceDate').value;
+                const formattedDate = invoiceDate ? formatDate(invoiceDate) : '-';
+                document.getElementById('billInvoiceDate').textContent = formattedDate;
+                document.getElementById('billInvoiceDate2').textContent = formattedDate;
+
+                // Update consignee info
+                document.getElementById('billConsigneeName').textContent = document.getElementById('consigneeName').value || '-';
+                document.getElementById('billConsigneeState').textContent = document.getElementById('consigneeState').value || '-';
+
+                // Update buyer info
+                document.getElementById('billBuyerName').textContent = document.getElementById('buyerName').value || '-';
+                document.getElementById('billBuyerAddress').innerHTML = document.getElementById('buyerAddress').value.replace(/\n/g, '<br>') || '-';
+                document.getElementById('billBuyerState').textContent = document.getElementById('buyerState').value || '-';
+
+                // Update bank details
+                document.getElementById('billBankName').textContent = document.getElementById('bankName').value || '-';
+                document.getElementById('billBankAccount').textContent = document.getElementById('bankAccount').value || '-';
+                document.getElementById('billBankIFSC').textContent = document.getElementById('bankIFSC').value || '-';
+
+                // Update all additional fields
+                const updateField = (id, value) => {
+                    document.getElementById(id).textContent = value || '-';
+                };
+
+                updateField('billBuyersOrderNo', document.getElementById('buyersOrderNo').value);
+                updateField('billDispatchDocNo', document.getElementById('dispatchDocNo').value);
+                updateField('billDeliveryNoteDate', document.getElementById('deliveryNoteDate').value);
+                updateField('billDispatchedThrough', document.getElementById('dispatchedThrough').value);
+                updateField('billVesselFlightNo', document.getElementById('vesselFlightNo').value);
+                updateField('billCityPortLoading', document.getElementById('cityPortLoading').value);
+                updateField('billPlaceReceipt', document.getElementById('placeReceipt').value);
+                updateField('billCityPortDischarge', document.getElementById('cityPortDischarge').value);
+                updateField('billDestination', document.getElementById('destination').value);
+                updateField('billDated', document.getElementById('dated').value);
+                updateField('billDated2', document.getElementById('dated').value);
+                updateField('billDeliveryNote', document.getElementById('deliveryNote').value);
+                updateField('billReferenceNo', document.getElementById('referenceNo').value);
+                updateField('billModePayment', document.getElementById('modePayment').value);
+                updateField('billOtherReferences', document.getElementById('otherReferences').value);
+                updateField('billTermsDelivery', document.getElementById('termsDelivery').value);
+
+                // Update products table
+                const productRows = document.querySelectorAll('.product-row');
+                const tableBody = document.getElementById('billProductsBody');
+                tableBody.innerHTML = '';
+
+                if (productRows.length === 0) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td colspan="8" style="text-align: center;">No products added</td>`;
+                    tableBody.appendChild(tr);
+                } else {
+                    productRows.forEach((row, index) => {
+                        const desc = row.querySelector('.product-desc').value || '';
+                        const hsn = row.querySelector('.product-hsn').value || '';
+                        const qty = row.querySelector('.product-qty').value || '';
+                        const rate = parseFloat(row.querySelector('.product-rate').value) || 0;
+                        const unit = row.querySelector('.product-unit').value || '';
+                        const discount = parseFloat(row.querySelector('.product-discount').value) || 0;
+                        const amount = parseFloat(row.querySelector('.product-amount').value) || 0;
+
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${index + 1}</td>
+                            <td>${desc || '-'}</td>
+                            <td>${hsn || '-'}</td>
+                            <td>${qty || '-'}</td>
+                            <td>${formatNumber(rate)}</td>
+                            <td>${unit || '-'}</td>
+                            <td>${discount > 0 ? discount : ''}</td>
+                            <td>${formatNumber(amount)}</td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+                }
+
+                // Calculate and display totals
+                const totals = calculateInvoiceTotals();
+                document.getElementById('billTotalAmount').textContent = formatNumber(totals.totalAmount);
+
+                // Format quantity display
+                let quantityDisplay = '-';
+                if (productRows.length > 0) {
+                    if (productRows.length === 1) {
+                        const qty = productRows[0].querySelector('.product-qty').value;
+                        quantityDisplay = qty || '1 ITEM';
+                    } else {
+                        quantityDisplay = totals.totalQuantity + ' ITEMS';
+                    }
+                }
+                document.getElementById('billTotalQuantity').textContent = quantityDisplay;
+
+                // Calculate and display taxes
+                const taxData = calculateTaxes(totals.totalAmount);
+                updateTaxDisplay(taxData);
+
+                // Update amount in words with FINAL AMOUNT (total after tax)
+                document.getElementById('billAmountWords').textContent = numberToWords(taxData.totalAfterTax);
+
+                // Show invoice and hide forms
+                document.getElementById('invoiceContainer').style.display = 'block';
+                document.getElementById('invoiceForm').classList.add('hidden');
+                
+                console.log('Invoice generated successfully');
+                
+            } catch (error) {
+                console.error('Error generating invoice:', error);
+                alert('Error generating invoice. Please check console for details.');
+            }
+        }
+
+        // Print Invoice
+        function printInvoice() {
+            console.log('Print invoice clicked');
+            // Temporarily set document title
+            const originalTitle = document.title;
+            const companyName = document.getElementById('companyName').value || 'OceanArc Exim';
+            const invoiceNumber = document.getElementById('billInvoiceNumber').textContent;
+            document.title = `${companyName} Invoice - ${invoiceNumber}`;
+
+            window.print();
+
+            // Restore original title
+            setTimeout(() => {
+                document.title = originalTitle;
+            }, 100);
+        }
+
+        // Save as PDF - WITH COMPRESSION SETTING
+        async function saveInvoiceAsPdf() {
+            console.log('Save as PDF clicked');
+            const invoiceContainer = document.getElementById('invoiceContainer');
+            const savePdfBtn = document.getElementById('invoiceSavePdfBtn');
+            const originalText = savePdfBtn.textContent;
+
+            try {
+                // Show loading state
+                savePdfBtn.textContent = 'Generating PDF...';
+                savePdfBtn.disabled = true;
+
+                // Get compression quality from form
+                const compressionQuality = parseFloat(document.getElementById('invoicePdfQuality').value) || 0.9;
+                const qualityPercentage = Math.round(compressionQuality * 100);
+                
+                console.log(`PDF compression quality set to: ${qualityPercentage}%`);
+
+                // Hide buttons for PDF
+                const invoiceButtons = document.querySelector('.invoice-buttons');
+                invoiceButtons.style.display = 'none';
+
+                // Apply PDF mode styles
+                invoiceContainer.classList.add('pdf-mode');
+                
+                // Add extra space at bottom
+                const originalPaddingBottom = invoiceContainer.style.paddingBottom;
+                invoiceContainer.style.paddingBottom = '50px';
+
+                // Calculate optimal scale to fit on one page
+                const containerHeight = invoiceContainer.offsetHeight;
+                const a4Height = 1123; // A4 height in pixels at 96 DPI (297mm * 3.78)
+                let scale = 1.0;
+                
+                if (containerHeight > a4Height) {
+                    // Scale down to fit
+                    scale = a4Height / containerHeight * 0.95; // 95% to ensure fit
+                    console.log('Scaling to:', scale);
+                }
+
+                // Capture the invoice with specified quality
+                const canvas = await html2canvas(invoiceContainer, {
+                    scale: scale * 1.5, // Higher scale for better quality
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff',
+                    width: invoiceContainer.offsetWidth,
+                    height: invoiceContainer.offsetHeight + 50,
+                    windowWidth: invoiceContainer.scrollWidth,
+                    windowHeight: invoiceContainer.scrollHeight + 50
+                });
+
+                // Create image data with selected compression
+                const imgData = canvas.toDataURL('image/jpeg', compressionQuality);
+                
+                // Create PDF
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                const imgWidth = 190; // Leave 10mm margins on each side (210-20)
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                // Check if content fits on one page
+                const pageHeight = 277; // 297mm - 20mm margins
+                
+                if (imgHeight <= pageHeight) {
+                    // Fits on one page
+                    pdf.addImage(imgData, 'JPEG', 10, 10, imgWidth, imgHeight);
+                } else {
+                    // Scale down to fit
+                    const scaleFactor = pageHeight / imgHeight;
+                    const scaledWidth = imgWidth * scaleFactor;
+                    const scaledHeight = imgHeight * scaleFactor;
+                    pdf.addImage(imgData, 'JPEG', 10, 10, scaledWidth, scaledHeight);
+                }
+
+                // Save the PDF
+                const invoiceNumber = document.getElementById('billInvoiceNumber').textContent;
+                const companyName = document.getElementById('companyName').value.replace(/\s+/g, '_') || 'Invoice';
+                const fileName = `${companyName}_Invoice_${invoiceNumber}.pdf`;
+                
+                pdf.save(fileName);
+
+                console.log(`PDF saved successfully at ${qualityPercentage}% quality`);
+
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Error generating PDF. Please try the Print function instead.');
+            } finally {
+                // Restore everything
+                savePdfBtn.textContent = originalText;
+                savePdfBtn.disabled = false;
+                invoiceContainer.classList.remove('pdf-mode');
+                invoiceContainer.style.paddingBottom = '';
+                invoiceButtons.style.display = 'flex';
+            }
+        }
+
+        // Reset Invoice Form
+        function resetInvoiceForm() {
+            console.log('Reset invoice form clicked');
+            // Reset logo
+            logoImage = null;
+            document.getElementById('logoUpload').value = '';
+            document.getElementById('logoPreview').innerHTML = '';
+            document.getElementById('logoPreview').style.display = 'none';
+
+            // Reset invoice logo placeholder
+            const logoPlaceholder = document.getElementById('invoiceLogo');
+            logoPlaceholder.innerHTML = 'Company Logo';
+            logoPlaceholder.style.background = 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
+            logoPlaceholder.style.border = '2px solid #3498db';
+            logoPlaceholder.style.padding = '5px';
+            logoPlaceholder.classList.remove('has-logo');
+
+            // Reset form fields to empty
+            document.getElementById('companyName').value = '';
+            document.getElementById('stateName').value = '';
+            document.getElementById('stateCode').value = '';
+            document.getElementById('gstNumber').value = '';
+            document.getElementById('invoiceNumber').value = '';
+            document.getElementById('invoiceDate').value = getTodayDate(); // Set to today's date
+            document.getElementById('consigneeName').value = '';
+            document.getElementById('consigneeState').value = '';
+            document.getElementById('buyerName').value = '';
+            document.getElementById('buyerState').value = '';
+            document.getElementById('buyerAddress').value = '';
+            document.getElementById('signatoryName').value = ''; // Reset signatory name
+
+            // Reset bank details
+            document.getElementById('bankName').value = '';
+            document.getElementById('bankAccount').value = '';
+            document.getElementById('bankIFSC').value = '';
+            document.getElementById('cgstRate').value = '1.5';
+            document.getElementById('sgstRate').value = '1.5';
+            document.getElementById('invoicePdfQuality').value = '0.9'; // Reset to default 90%
+
+            // Reset additional fields
+            document.getElementById('buyersOrderNo').value = '';
+            document.getElementById('dispatchDocNo').value = '';
+            document.getElementById('deliveryNoteDate').value = '';
+            document.getElementById('dispatchedThrough').value = '';
+            document.getElementById('vesselFlightNo').value = '';
+            document.getElementById('cityPortLoading').value = '';
+            document.getElementById('placeReceipt').value = '';
+            document.getElementById('cityPortDischarge').value = '';
+            document.getElementById('destination').value = '';
+            document.getElementById('dated').value = '';
+            document.getElementById('deliveryNote').value = '';
+            document.getElementById('referenceNo').value = '';
+            document.getElementById('modePayment').value = '';
+            document.getElementById('otherReferences').value = '';
+            document.getElementById('termsDelivery').value = '';
+
+            // Reset products - keep only one empty row
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = `
+                <div class="product-row" data-index="0">
+                    <h4>Product #1</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" class="product-desc" placeholder="e.g., RING">
+                        </div>
+                        <div class="form-group">
+                            <label>HSN/SAC Code</label>
+                            <input type="text" class="product-hsn" placeholder="e.g., 7117">
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="text" class="product-qty" placeholder="e.g., 1 PIECE">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Rate (with GST included)</label>
+                            <input type="number" class="product-rate" placeholder="0.00" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Unit</label>
+                            <input type="text" class="product-unit" placeholder="e.g., PIECE">
+                        </div>
+                        <div class="form-group">
+                            <label>Discount %</label>
+                            <input type="number" class="product-discount" placeholder="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Amount (with GST)</label>
+                            <input type="number" class="product-amount" readonly placeholder="Auto-calculated">
+                        </div>
+                    </div>
+                    <button type="button" class="remove-product">Remove Product</button>
+                </div>
+            `;
+
+            productCounter = 1;
+
+            // Initialize amount calculation for the first row
+            const firstRow = document.querySelector('.product-row');
+            const rateInput = firstRow.querySelector('.product-rate');
+            const discountInput = firstRow.querySelector('.product-discount');
+
+            rateInput.addEventListener('input', () => calculateProductAmount(firstRow));
+            discountInput.addEventListener('input', () => calculateProductAmount(firstRow));
+            calculateProductAmount(firstRow);
+
+            // Reset invoice display for bank details
+            document.getElementById('billBankName').textContent = '-';
+            document.getElementById('billBankAccount').textContent = '-';
+            document.getElementById('billBankIFSC').textContent = '-';
+            document.getElementById('billTotalBeforeTax').textContent = '0.00';
+            document.getElementById('billCGST').textContent = '0.00';
+            document.getElementById('billSGST').textContent = '0.00';
+            document.getElementById('billTotalTax').textContent = '0.00';
+            document.getElementById('billTotalAfterTax').textContent = '0.00';
+            document.getElementById('billAmountWords').textContent = 'INR Zero Rupees Only';
+            document.getElementById('billSignatory').innerHTML = 'for Company Name<br>Authorised Signatory';
+
+            // Show form and hide invoice
+            document.getElementById('invoiceForm').classList.remove('hidden');
+            document.getElementById('invoiceContainer').style.display = 'none';
+        }
+
+        // ============================================
+        // SALARY SLIP GENERATOR FUNCTIONS
+        // ============================================
+
+        // Calculate totals for salary
+        function calculateSalaryTotals() {
+            const basicSalary = parseFloat(document.getElementById('basicSalary').value) || 0;
+            const securityDeposit = parseFloat(document.getElementById('securityDeposit').value) || 0;
+            const securityReturn = parseFloat(document.getElementById('securityReturn').value) || 0;
+            const withdrawal = parseFloat(document.getElementById('withdrawal').value) || 0;
+
+            const totalEarning = basicSalary + securityDeposit + securityReturn;
+            const netPayable = totalEarning - withdrawal;
+
+            return {
+                totalEarning: totalEarning,
+                netPayable: netPayable
+            };
+        }
+
+        // Generate Salary Slip
+        function generateSalarySlip() {
+            console.log('Generate salary slip clicked');
+            
+            try {
+                // Update company information
+                document.getElementById('slipCompanyName').textContent = 
+                    document.getElementById('salaryCompanyName').value || 'OceanArc Exim';
+                
+                const monthYear = document.getElementById('monthYear').value || 'November-2025';
+                document.getElementById('slipMonthYear').textContent = 
+                    `PAY SLIP FOR THE MONTH OF ${monthYear}`;
+
+                // Update employee information
+                document.getElementById('slipEmpCode').textContent = 
+                    document.getElementById('empCode').value || 'Empcode2';
+                document.getElementById('slipEmpName').textContent = 
+                    document.getElementById('empName').value || 'Hasti Khokhar';
+                document.getElementById('slipDepartment').textContent = 
+                    document.getElementById('department').value || 'Sales & Marketing';
+                document.getElementById('slipDesignation').textContent = 
+                    document.getElementById('designation').value || 'Sales Executive';
+
+                // Update salary amounts
+                document.getElementById('slipBasicSalary').textContent = 
+                    formatNumber(document.getElementById('basicSalary').value || 0);
+                document.getElementById('slipSecurityDeposit').textContent = 
+                    formatNumber(document.getElementById('securityDeposit').value || 0);
+                document.getElementById('slipSecurityReturn').textContent = 
+                    formatNumber(document.getElementById('securityReturn').value || 0);
+                document.getElementById('slipWithdrawal').textContent = 
+                    formatNumber(document.getElementById('withdrawal').value || 0);
+
+                // Calculate and display totals
+                const totals = calculateSalaryTotals();
+                document.getElementById('slipTotalEarning').textContent = formatNumber(totals.totalEarning);
+                document.getElementById('slipNetPayable').textContent = formatNumber(totals.netPayable);
+
+                // Show salary slip and hide form
+                document.getElementById('salarySlipContainer').style.display = 'block';
+                document.getElementById('salaryForm').classList.add('hidden');
+                
+                console.log('Salary slip generated successfully');
+                
+            } catch (error) {
+                console.error('Error generating salary slip:', error);
+                alert('Error generating salary slip. Please check console for details.');
+            }
+        }
+
+        // Print Salary Slip
+        function printSalarySlip() {
+            console.log('Print salary slip clicked');
+            // Temporarily set document title
+            const originalTitle = document.title;
+            const companyName = document.getElementById('salaryCompanyName').value || 'OceanArc Exim';
+            const empName = document.getElementById('empName').value || 'Employee';
+            const monthYear = document.getElementById('monthYear').value || 'Month-Year';
+            document.title = `${companyName} Salary Slip - ${empName} - ${monthYear}`;
+
+            window.print();
+
+            // Restore original title
+            setTimeout(() => {
+                document.title = originalTitle;
+            }, 100);
+        }
+
+        // Save as PDF for salary
+        async function saveSalaryAsPdf() {
+            console.log('Save as PDF clicked');
+            const salarySlipContainer = document.getElementById('salarySlipContainer');
+            const savePdfBtn = document.getElementById('salarySavePdfBtn');
+            const originalText = savePdfBtn.textContent;
+
+            try {
+                // Show loading state
+                savePdfBtn.textContent = 'Generating PDF...';
+                savePdfBtn.disabled = true;
+
+                // Get compression quality from form
+                const compressionQuality = parseFloat(document.getElementById('salaryPdfQuality').value) || 0.9;
+                const qualityPercentage = Math.round(compressionQuality * 100);
+                
+                console.log(`PDF compression quality set to: ${qualityPercentage}%`);
+
+                // Hide buttons for PDF
+                const salaryButtons = document.querySelector('.salary-buttons');
+                salaryButtons.style.display = 'none';
+
+                // Add extra space at bottom
+                const originalPaddingBottom = salarySlipContainer.style.paddingBottom;
+                salarySlipContainer.style.paddingBottom = '30px';
+
+                // Calculate optimal scale to fit on one page
+                const containerHeight = salarySlipContainer.offsetHeight;
+                const a4Height = 1123; // A4 height in pixels at 96 DPI
+                let scale = 1.0;
+                
+                if (containerHeight > a4Height) {
+                    scale = a4Height / containerHeight * 0.95;
+                    console.log('Scaling to:', scale);
+                }
+
+                // Capture the salary slip with specified quality
+                const canvas = await html2canvas(salarySlipContainer, {
+                    scale: scale * 1.5,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff',
+                    width: salarySlipContainer.offsetWidth,
+                    height: salarySlipContainer.offsetHeight + 30,
+                    windowWidth: salarySlipContainer.scrollWidth,
+                    windowHeight: salarySlipContainer.scrollHeight + 30
+                });
+
+                // Create image data with selected compression
+                const imgData = canvas.toDataURL('image/jpeg', compressionQuality);
+                
+                // Create PDF
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                const imgWidth = 190; // Leave 10mm margins on each side (210-20)
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                // Check if content fits on one page
+                const pageHeight = 277; // 297mm - 20mm margins
+                
+                if (imgHeight <= pageHeight) {
+                    // Fits on one page
+                    pdf.addImage(imgData, 'JPEG', 10, 10, imgWidth, imgHeight);
+                } else {
+                    // Scale down to fit
+                    const scaleFactor = pageHeight / imgHeight;
+                    const scaledWidth = imgWidth * scaleFactor;
+                    const scaledHeight = imgHeight * scaleFactor;
+                    pdf.addImage(imgData, 'JPEG', 10, 10, scaledWidth, scaledHeight);
+                }
+
+                // Save the PDF
+                const empName = document.getElementById('empName').value.replace(/\s+/g, '_') || 'Employee';
+                const monthYear = document.getElementById('monthYear').value.replace(/\s+/g, '_') || 'Salary_Slip';
+                const fileName = `${empName}_Salary_Slip_${monthYear}.pdf`;
+                
+                pdf.save(fileName);
+
+                console.log(`PDF saved successfully at ${qualityPercentage}% quality`);
+
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Error generating PDF. Please try the Print function instead.');
+            } finally {
+                // Restore everything
+                savePdfBtn.textContent = originalText;
+                savePdfBtn.disabled = false;
+                salarySlipContainer.style.paddingBottom = '';
+                salaryButtons.style.display = 'flex';
+            }
+        }
+
+        // Reset Salary Form
+        function resetSalaryForm() {
+            console.log('Reset salary form clicked');
+            
+            // Reset form fields to default values
+            document.getElementById('salaryCompanyName').value = 'OceanArc Exim';
+            document.getElementById('monthYear').value = 'November-2025';
+            document.getElementById('empCode').value = 'Empcode2';
+            document.getElementById('empName').value = 'Hasti Khokhar';
+            document.getElementById('department').value = 'Sales & Marketing';
+            document.getElementById('designation').value = 'Sales Executive';
+            document.getElementById('basicSalary').value = '7640';
+            document.getElementById('securityDeposit').value = '0';
+            document.getElementById('securityReturn').value = '0';
+            document.getElementById('withdrawal').value = '0';
+            document.getElementById('salaryPdfQuality').value = '0.9';
+
+            // Show form and hide salary slip
+            document.getElementById('salaryForm').classList.remove('hidden');
+            document.getElementById('salarySlipContainer').style.display = 'none';
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing...');
+            setupEventListeners();
+            // Start with invoice tab active
+            switchTab('invoice');
+        });
+    </script>
+</body>
+</html>
