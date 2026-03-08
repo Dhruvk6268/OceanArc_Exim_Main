@@ -27,8 +27,8 @@ try {
     $searchUserId = trim($_GET['search_user_id'] ?? '');
     $searchPage = substr($searchPage, 0, 200);
     $searchUserId = substr($searchUserId, 0, 64);
-    $page = max(1, (int)($_GET['page'] ?? 1));
-    $limit = (int)($_GET['limit'] ?? 20);
+    $page = max(1, (int) ($_GET['page'] ?? 1));
+    $limit = (int) ($_GET['limit'] ?? 20);
     if ($limit < 1) {
         $limit = 20;
     }
@@ -83,12 +83,12 @@ try {
     $liveSql = "SELECT COUNT(*) FROM website_analytics {$liveWhereSql}";
     $liveStmt = $pdo->prepare($liveSql);
     $liveStmt->execute($params);
-    $liveViews = (int)$liveStmt->fetchColumn();
+    $liveViews = (int) $liveStmt->fetchColumn();
 
     $countSql = "SELECT COUNT(*) FROM website_analytics {$whereSql}";
     $countStmt = $pdo->prepare($countSql);
     $countStmt->execute($params);
-    $totalLogs = (int)$countStmt->fetchColumn();
+    $totalLogs = (int) $countStmt->fetchColumn();
 
     $recentSql = "
         SELECT user_id, page_url, country, city, device_type, browser, os, last_activity, visit_start, duration_seconds, is_returning
@@ -118,10 +118,10 @@ try {
     echo json_encode([
         'success' => true,
         'summary' => [
-            'total_views' => (int)($summary['total_views'] ?? 0),
-            'unique_users' => (int)($summary['unique_users'] ?? 0),
+            'total_views' => (int) ($summary['total_views'] ?? 0),
+            'unique_users' => (int) ($summary['unique_users'] ?? 0),
             'live_views' => $liveViews,
-            'returning_views' => (int)($summary['returning_views'] ?? 0),
+            'returning_views' => (int) ($summary['returning_views'] ?? 0),
         ],
         'recent_logs' => $recentLogs,
         'top_pages' => $topPages,
