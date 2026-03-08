@@ -271,6 +271,106 @@
         border-bottom: none;
       }
 
+      .analytics-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .analytics-subtitle {
+        color: #5a6f89;
+        font-size: 0.95rem;
+      }
+
+      .analytics-refresh-btn {
+        background: #0f5fb5;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .analytics-cards {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .analytics-card {
+        background: #f7fbff;
+        border: 1px solid #d7e7fb;
+        border-radius: 10px;
+        padding: 14px;
+      }
+
+      .analytics-card h4 {
+        margin: 0 0 8px;
+        color: #406182;
+        font-size: 0.86rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+      }
+
+      .analytics-value {
+        margin: 0;
+        color: #0f355d;
+        font-size: 1.7rem;
+        font-weight: 800;
+      }
+
+      .analytics-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 16px;
+      }
+
+      .analytics-panel {
+        border: 1px solid #e1ebf7;
+        border-radius: 10px;
+        padding: 12px;
+        background: #fff;
+      }
+
+      .analytics-panel h3 {
+        margin: 2px 0 8px;
+        color: #163c65;
+        font-size: 1rem;
+      }
+
+      .analytics-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+      }
+
+      .analytics-table th,
+      .analytics-table td {
+        padding: 9px 10px;
+        border-bottom: 1px solid #e9eef4;
+        font-size: 0.9rem;
+        text-align: left;
+      }
+
+      .analytics-table th {
+        color: #304d6a;
+        background: #f4f8fc;
+      }
+
+      .analytics-live-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #22c55e;
+        margin-right: 6px;
+      }
+
       @media (max-width: 992px) {
         .admin-layout {
           grid-template-columns: 1fr;
@@ -299,6 +399,14 @@
 
         .date-filter {
           flex-wrap: wrap;
+        }
+
+        .analytics-cards {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .analytics-grid {
+          grid-template-columns: 1fr;
         }
       }
     </style>
@@ -331,6 +439,7 @@
       <div class="admin-layout">
         <div class="admin-tabs">
           <div class="admin-tab active" data-tab="inquiries">Inquiries</div>
+          <div class="admin-tab" data-tab="analytics">Analytics</div>
           <div class="admin-tab" data-tab="blog">Blog Posts</div>
           <div class="admin-tab" data-tab="products">Agro Products</div>
           <div class="admin-tab" data-tab="uploads">Uploads</div>
@@ -408,6 +517,78 @@
     </button>
   </div>
 </div>
+
+      <!-- Analytics Tab -->
+      <div class="tab-content" id="analytics-tab">
+        <div class="analytics-header">
+          <div>
+            <h2 style="margin: 0">Website Analytics</h2>
+            <div class="analytics-subtitle">
+              Live views and visitor logs (auto-refresh every 15 seconds)
+            </div>
+          </div>
+          <button id="refreshAnalyticsBtn" class="analytics-refresh-btn">
+            Refresh Now
+          </button>
+        </div>
+
+        <div class="analytics-cards">
+          <div class="analytics-card">
+            <h4>Total Views</h4>
+            <p class="analytics-value" id="analyticsTotalViews">0</p>
+          </div>
+          <div class="analytics-card">
+            <h4>Unique Users</h4>
+            <p class="analytics-value" id="analyticsUniqueUsers">0</p>
+          </div>
+          <div class="analytics-card">
+            <h4><span class="analytics-live-dot"></span>Live Views</h4>
+            <p class="analytics-value" id="analyticsLiveViews">0</p>
+          </div>
+          <div class="analytics-card">
+            <h4>Returning Views</h4>
+            <p class="analytics-value" id="analyticsReturningViews">0</p>
+          </div>
+        </div>
+
+        <div class="analytics-grid">
+          <div class="analytics-panel">
+            <h3>Recent User Logs</h3>
+            <table class="analytics-table" id="analyticsLogsTable">
+              <thead>
+                <tr>
+                  <th>Page</th>
+                  <th>Location</th>
+                  <th>Device</th>
+                  <th>Browser</th>
+                  <th>Last Activity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="5">No analytics data yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="analytics-panel">
+            <h3>Top Pages</h3>
+            <table class="analytics-table" id="analyticsTopPagesTable">
+              <thead>
+                <tr>
+                  <th>Page</th>
+                  <th>Views</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="2">No page data yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
 
       <!-- Blog Posts Tab -->
       <div class="tab-content" id="blog-tab">

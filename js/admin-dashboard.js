@@ -115,6 +115,8 @@ function logoutAdmin() {
 
 /* ---------------- TABS ---------------- */
 const ADMIN_TAB_STORAGE_KEY = "oceanarc_admin_active_tab";
+const ANALYTICS_REFRESH_INTERVAL_MS = 15000;
+let analyticsRefreshTimer = null;
 
 function activateAdminTab(tabName) {
   const targetTab = document.querySelector(`.admin-tab[data-tab="${tabName}"]`);
@@ -139,6 +141,13 @@ function activateAdminTab(tabName) {
 
   if (tabName === "uploads") {
     loadUploads();
+  }
+
+  if (tabName === "analytics") {
+    loadAnalytics();
+    startAnalyticsAutoRefresh();
+  } else {
+    stopAnalyticsAutoRefresh();
   }
 
   return true;
@@ -461,6 +470,13 @@ function setupEventListeners() {
             alert(res.error);
           }
         });
+    });
+  }
+
+  const refreshAnalyticsBtn = document.getElementById("refreshAnalyticsBtn");
+  if (refreshAnalyticsBtn) {
+    refreshAnalyticsBtn.addEventListener("click", () => {
+      loadAnalytics();
     });
   }
 
@@ -1535,6 +1551,152 @@ function deleteProduct(id) {
     })
     .catch(() => alert("Error deleting product"));
 }
+
+/* ---------------- ANALYTICS ---------------- */
+function formatNumber(value) {
+  const num = Number(value || 0);
+  if (!Number.isFinite(num)) return "0";
+  return num.toLocaleString("en-US");
+}
+
+function formatRelativeTimestamp(value) {
+  if (!value) return "N/A";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return formatDateTime(date.toISOString());
+}
+
+function renderAnalyticsSummary(summary = {}) {
+  const totalViewsEl = document.getElementById("analyticsTotalViews");
+  const uniqueUsersEl = document.getElementById("analyticsUniqueUsers");
+  const liveViewsEl = document.getElementById("analyticsLiveViews");
+  const returningViewsEl = document.getElementById("analyticsReturningViews");
+
+  if (totalViewsEl) {
+    totalViewsEl.textContent = formatNumber(summary.total_views);
+  }
+  if (uniqueUsersEl) {
+    uniqueUsersEl.textContent = formatNumber(summary.unique_users);
+  }
+  if (liveViewsEl) {
+    liveViewsEl.textContent = formatNumber(summary.live_views);
+  }
+  if (returningViewsEl) {
+    returningViewsEl.textContent = formatNumber(summary.returning_views);
+  }
+}
+
+function sanitizePagePath(pageUrl) {
+  const raw = String(pageUrl || "").trim();
+  if (!raw) return "/";
+
+  try {
+    if (/^https?:\/\//i.test(raw)) {
+      const parsed = new URL(raw);
+      return parsed.pathname + (parsed.search || "");
+    }
+  } catch (error) {
+    // Keep raw if URL parsing fails.
+  }
+
+  return raw;
+}
+
+function renderAnalyticsLogs(logs = []) {
+  const tbody = document.querySelector("#analyticsLogsTable tbody");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  if (!Array.isArray(logs) || !logs.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No analytics data yet</td></tr>`;
+    return;
+  }
+
+  logs.forEach((log) => {
+    const page = escapeHtml(sanitizePagePath(log.page_url));
+    const location = `${escapeHtml(log.city || "Unknown")}, ${escapeHtml(log.country || "Unknown")}`;
+    const device = escapeHtml(log.device_type || "Unknown");
+    const browser = escapeHtml(log.browser || "Unknown");
+    const lastActivity = escapeHtml(formatRelativeTimestamp(log.last_activity));
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${page}</td>
+      <td>${location}</td>
+      <td>${device}</td>
+      <td>${browser}</td>
+      <td>${lastActivity}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+function renderAnalyticsTopPages(topPages = []) {
+  const tbody = document.querySelector("#analyticsTopPagesTable tbody");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  if (!Array.isArray(topPages) || !topPages.length) {
+    tbody.innerHTML = `<tr><td colspan="2" style="text-align:center;">No page data yet</td></tr>`;
+    return;
+  }
+
+  topPages.forEach((item) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${escapeHtml(sanitizePagePath(item.page_url))}</td>
+      <td>${formatNumber(item.views)}</td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+function loadAnalytics() {
+  fetch("php/get-analytics.php")
+    .then((r) => r.json())
+    .then((data) => {
+      if (!data || !data.success) {
+        const errorMessage = data?.error || "Unable to load analytics";
+        renderAnalyticsSummary({});
+        renderAnalyticsLogs([]);
+        renderAnalyticsTopPages([]);
+        console.error("Analytics load error:", errorMessage);
+        return;
+      }
+
+      renderAnalyticsSummary(data.summary || {});
+      renderAnalyticsLogs(data.recent_logs || []);
+      renderAnalyticsTopPages(data.top_pages || []);
+    })
+    .catch((err) => {
+      console.error("Analytics request failed:", err);
+      renderAnalyticsSummary({});
+      renderAnalyticsLogs([]);
+      renderAnalyticsTopPages([]);
+    });
+}
+
+function startAnalyticsAutoRefresh() {
+  stopAnalyticsAutoRefresh();
+  analyticsRefreshTimer = setInterval(() => {
+    const activeTab = document.querySelector(".admin-tab.active");
+    if (activeTab?.dataset.tab === "analytics") {
+      loadAnalytics();
+    }
+  }, ANALYTICS_REFRESH_INTERVAL_MS);
+}
+
+function stopAnalyticsAutoRefresh() {
+  if (!analyticsRefreshTimer) return;
+  clearInterval(analyticsRefreshTimer);
+  analyticsRefreshTimer = null;
+}
+
+window.addEventListener("beforeunload", () => {
+  stopAnalyticsAutoRefresh();
+});
 
 /* ---------------- UPLOADS ---------------- */
 function formatFileSize(bytes) {
