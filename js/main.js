@@ -78,26 +78,51 @@ function lazyLoadDeferredMedia(root = document) {
     const deferredVideos = Array.from(root.querySelectorAll('video[data-src]'))
         .filter(video => !video.closest('#slider'));
     const deferredImages = Array.from(root.querySelectorAll('img[data-src]'));
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const effectiveType = ((connection && connection.effectiveType) || '').toLowerCase();
+    const isConstrainedNetwork = Boolean(connection && connection.saveData) || /(^|-)2g/.test(effectiveType);
+    const videoRootMargin = isConstrainedNetwork ? '700px 0px' : '1600px 0px';
+    const imageRootMargin = isConstrainedNetwork ? '360px 0px' : '900px 0px';
+    const warmupCount = isConstrainedNetwork ? 1 : 3;
+    const warmupPreload = isConstrainedNetwork ? 'metadata' : 'auto';
 
-    const loadVideo = (video) => {
-        if (!video || video.dataset.lazyLoaded === '1') return;
+    const ensureVideoSource = (video) => {
+        if (!video) return false;
 
         const src = video.getAttribute('data-src');
         if (src) {
             video.src = src;
             video.removeAttribute('data-src');
-            video.dataset.lazyLoaded = '1';
-            video.load();
-            return;
+            return true;
         }
 
         const deferredSource = video.querySelector('source[data-src]');
         if (deferredSource) {
             deferredSource.src = deferredSource.getAttribute('data-src');
             deferredSource.removeAttribute('data-src');
-            video.dataset.lazyLoaded = '1';
+            return true;
+        }
+
+        return Boolean(video.currentSrc || video.getAttribute('src'));
+    };
+
+    const warmupVideo = (video, preloadMode = warmupPreload) => {
+        if (!video || video.dataset.videoPrefetched === '1') return;
+        if (!ensureVideoSource(video)) return;
+        video.preload = preloadMode;
+        if (video.readyState < 1) {
             video.load();
         }
+        video.dataset.videoPrefetched = '1';
+    };
+
+    const loadVideo = (video) => {
+        if (!video || video.dataset.lazyLoaded === '1') return;
+        warmupVideo(video, isConstrainedNetwork ? 'metadata' : 'auto');
+        if (video.readyState < 2) {
+            video.load();
+        }
+        video.dataset.lazyLoaded = '1';
     };
 
     const loadImage = (img) => {
@@ -110,7 +135,7 @@ function lazyLoadDeferredMedia(root = document) {
         }
     };
 
-    const observeLazyElements = (elements, loader) => {
+    const observeLazyElements = (elements, loader, rootMargin) => {
         if (!elements.length) return;
 
         if (!('IntersectionObserver' in window)) {
@@ -124,7 +149,7 @@ function lazyLoadDeferredMedia(root = document) {
                 loader(entry.target);
                 obs.unobserve(entry.target);
             });
-        }, { rootMargin: '240px 0px', threshold: 0.01 });
+        }, { rootMargin, threshold: 0.01 });
 
         elements.forEach(element => {
             if (element.dataset.lazyObserved === '1') return;
@@ -133,8 +158,19 @@ function lazyLoadDeferredMedia(root = document) {
         });
     };
 
-    observeLazyElements(deferredVideos, loadVideo);
-    observeLazyElements(deferredImages, loadImage);
+    observeLazyElements(deferredVideos, loadVideo, videoRootMargin);
+    observeLazyElements(deferredImages, loadImage, imageRootMargin);
+
+    const warmupDeferredVideos = () => {
+        if (!deferredVideos.length) return;
+        deferredVideos.slice(0, warmupCount).forEach(video => warmupVideo(video, warmupPreload));
+    };
+
+    if ('requestIdleCallback' in window) {
+        requestIdleCallback(warmupDeferredVideos, { timeout: 1800 });
+    } else {
+        setTimeout(warmupDeferredVideos, 500);
+    }
 }
 
 function optimizeAutoplayVideos(root = document) {
@@ -155,7 +191,7 @@ function optimizeAutoplayVideos(root = document) {
                 video.pause();
             }
         });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.01, rootMargin: '240px 0px' });
 
     videos.forEach(video => {
         if (video.dataset.playbackObserved === '1') return;

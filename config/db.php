@@ -9,8 +9,8 @@ function getDB()
 
     $host = 'localhost';
     $dbname = 'oceanarcexim';
-    $username = 'oceanarcuser';
-    $password = 'strong_password';
+    $username = 'root';
+    $password = '';
 
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
