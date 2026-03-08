@@ -395,7 +395,8 @@
         font-weight: 700;
       }
 
-      .analytics-filter-item input[type="date"] {
+      .analytics-filter-item input[type="date"],
+      .analytics-filter-item input[type="text"] {
         border: 1px solid #c9d9ec;
         border-radius: 7px;
         padding: 7px 9px;
@@ -622,6 +623,14 @@
             <label for="analyticsEndDate">To Date</label>
             <input type="date" id="analyticsEndDate" />
           </div>
+          <div class="analytics-filter-item">
+            <label for="analyticsSearchPage">Search Page</label>
+            <input type="text" id="analyticsSearchPage" placeholder="/about.html" />
+          </div>
+          <div class="analytics-filter-item">
+            <label for="analyticsSearchUserId">Search User ID</label>
+            <input type="text" id="analyticsSearchUserId" placeholder="md5 user id" />
+          </div>
           <div class="analytics-filter-actions">
             <button id="applyAnalyticsDateBtn" class="analytics-filter-btn">Apply</button>
             <button id="resetAnalyticsDateBtn" class="analytics-filter-btn secondary">Reset</button>
@@ -656,6 +665,7 @@
                 <thead>
                   <tr>
                     <th>Page</th>
+                    <th>User ID</th>
                     <th>Location</th>
                     <th>Device</th>
                     <th>Browser</th>
@@ -664,7 +674,7 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="5">No analytics data yet</td>
+                    <td colspan="6">No analytics data yet</td>
                   </tr>
                 </tbody>
               </table>

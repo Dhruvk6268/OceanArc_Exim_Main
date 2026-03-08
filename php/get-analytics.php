@@ -23,6 +23,10 @@ try {
 
     $startDate = trim($_GET['start_date'] ?? '');
     $endDate = trim($_GET['end_date'] ?? '');
+    $searchPage = trim($_GET['search_page'] ?? '');
+    $searchUserId = trim($_GET['search_user_id'] ?? '');
+    $searchPage = substr($searchPage, 0, 200);
+    $searchUserId = substr($searchUserId, 0, 64);
     $page = max(1, (int)($_GET['page'] ?? 1));
     $limit = (int)($_GET['limit'] ?? 20);
     if ($limit < 1) {
@@ -46,6 +50,16 @@ try {
         $params[':end_datetime'] = $endDate . ' 23:59:59';
     }
 
+    if ($searchPage !== '') {
+        $whereClauses[] = "page_url LIKE :search_page";
+        $params[':search_page'] = '%' . $searchPage . '%';
+    }
+
+    if ($searchUserId !== '') {
+        $whereClauses[] = "user_id LIKE :search_user_id";
+        $params[':search_user_id'] = '%' . $searchUserId . '%';
+    }
+
     $whereSql = '';
     if (!empty($whereClauses)) {
         $whereSql = ' WHERE ' . implode(' AND ', $whereClauses);
@@ -63,9 +77,13 @@ try {
     $summaryStmt->execute($params);
     $summary = $summaryStmt->fetch(PDO::FETCH_ASSOC) ?: [];
 
-    $liveViews = (int)$pdo
-        ->query("SELECT COUNT(*) FROM website_analytics WHERE last_activity >= (NOW() - INTERVAL 5 MINUTE)")
-        ->fetchColumn();
+    $liveWhereClauses = $whereClauses;
+    $liveWhereClauses[] = "last_activity >= (NOW() - INTERVAL 5 MINUTE)";
+    $liveWhereSql = ' WHERE ' . implode(' AND ', $liveWhereClauses);
+    $liveSql = "SELECT COUNT(*) FROM website_analytics {$liveWhereSql}";
+    $liveStmt = $pdo->prepare($liveSql);
+    $liveStmt->execute($params);
+    $liveViews = (int)$liveStmt->fetchColumn();
 
     $countSql = "SELECT COUNT(*) FROM website_analytics {$whereSql}";
     $countStmt = $pdo->prepare($countSql);
@@ -73,7 +91,7 @@ try {
     $totalLogs = (int)$countStmt->fetchColumn();
 
     $recentSql = "
-        SELECT page_url, country, city, device_type, browser, os, last_activity, visit_start, duration_seconds, is_returning
+        SELECT user_id, page_url, country, city, device_type, browser, os, last_activity, visit_start, duration_seconds, is_returning
         FROM website_analytics
         {$whereSql}
         ORDER BY last_activity DESC
@@ -115,7 +133,9 @@ try {
         ],
         'filters' => [
             'start_date' => $startDate,
-            'end_date' => $endDate
+            'end_date' => $endDate,
+            'search_page' => $searchPage,
+            'search_user_id' => $searchUserId
         ]
     ]);
 } catch (Throwable $e) {

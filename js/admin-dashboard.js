@@ -121,6 +121,8 @@ let analyticsRefreshTimer = null;
 const analyticsState = {
   startDate: "",
   endDate: "",
+  searchPage: "",
+  searchUserId: "",
   page: 1,
   total: 0,
   hasMore: true,
@@ -494,6 +496,8 @@ function setupEventListeners() {
     applyAnalyticsDateBtn.addEventListener("click", () => {
       const startDate = (document.getElementById("analyticsStartDate")?.value || "").trim();
       const endDate = (document.getElementById("analyticsEndDate")?.value || "").trim();
+      const searchPage = (document.getElementById("analyticsSearchPage")?.value || "").trim();
+      const searchUserId = (document.getElementById("analyticsSearchUserId")?.value || "").trim();
 
       if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
         alert("From date cannot be after To date.");
@@ -502,6 +506,8 @@ function setupEventListeners() {
 
       analyticsState.startDate = startDate;
       analyticsState.endDate = endDate;
+      analyticsState.searchPage = searchPage;
+      analyticsState.searchUserId = searchUserId;
       loadAnalytics();
     });
   }
@@ -511,11 +517,17 @@ function setupEventListeners() {
     resetAnalyticsDateBtn.addEventListener("click", () => {
       const startDateInput = document.getElementById("analyticsStartDate");
       const endDateInput = document.getElementById("analyticsEndDate");
+      const searchPageInput = document.getElementById("analyticsSearchPage");
+      const searchUserIdInput = document.getElementById("analyticsSearchUserId");
       if (startDateInput) startDateInput.value = "";
       if (endDateInput) endDateInput.value = "";
+      if (searchPageInput) searchPageInput.value = "";
+      if (searchUserIdInput) searchUserIdInput.value = "";
 
       analyticsState.startDate = "";
       analyticsState.endDate = "";
+      analyticsState.searchPage = "";
+      analyticsState.searchUserId = "";
       loadAnalytics();
     });
   }
@@ -1692,13 +1704,14 @@ function renderAnalyticsLogs(logs = [], append = false) {
 
   if (!Array.isArray(logs) || !logs.length) {
     if (!append) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No analytics data yet</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No analytics data yet</td></tr>`;
     }
     return;
   }
 
   logs.forEach((log) => {
     const page = escapeHtml(sanitizePagePath(log.page_url));
+    const userId = escapeHtml(log.user_id || "N/A");
     const location = `${escapeHtml(log.city || "Unknown")}, ${escapeHtml(log.country || "Unknown")}`;
     const device = escapeHtml(log.device_type || "Unknown");
     const browser = escapeHtml(log.browser || "Unknown");
@@ -1708,6 +1721,7 @@ function renderAnalyticsLogs(logs = [], append = false) {
     row.setAttribute("data-log-row", "1");
     row.innerHTML = `
       <td>${page}</td>
+      <td>${userId}</td>
       <td>${location}</td>
       <td>${device}</td>
       <td>${browser}</td>
@@ -1762,6 +1776,12 @@ function loadAnalytics(options = {}) {
   }
   if (analyticsState.endDate) {
     params.set("end_date", analyticsState.endDate);
+  }
+  if (analyticsState.searchPage) {
+    params.set("search_page", analyticsState.searchPage);
+  }
+  if (analyticsState.searchUserId) {
+    params.set("search_user_id", analyticsState.searchUserId);
   }
 
   analyticsState.loading = true;
