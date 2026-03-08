@@ -18,7 +18,8 @@
   <meta property="og:url" content="https://oceanarcexim.com">
   <meta property="og:type" content="website">
 
-  <link rel="icon" href="images/logo.svg" type="image/svg+xml">  <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+  <link rel="icon" href="images/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://pagead2.googlesyndication.com">
   <link rel="preconnect" href="https://www.googletagmanager.com">
   
   <link rel="stylesheet" href="css/style.css" />
@@ -559,7 +560,7 @@
     </div>
     <div class="gallery-grid">
       <div class="gallery-item">
-        <video autoplay muted loop playsinline preload="none" data-src="videos/banarasi saree.mp4">
+        <video autoplay muted loop playsinline preload="none" data-src="videos/banarasi saree.mp4" poster="images/Untitled design.webp">
           Your browser does not support the video tag.
         </video>
         <div class="gallery-overlay">
@@ -569,7 +570,7 @@
       </div>
 
       <div class="gallery-item">
-        <video autoplay muted loop playsinline preload="none" data-src="videos/printedkurti.mp4">
+        <video autoplay muted loop playsinline preload="none" data-src="videos/printedkurti.mp4" poster="images/kurtis.webp">
           Your browser does not support the video tag.
         </video>
         <div class="gallery-overlay">
@@ -579,7 +580,7 @@
       </div>
 
       <div class="gallery-item">
-        <video autoplay muted loop playsinline preload="none" data-src="videos/lehanga.mp4">
+        <video autoplay muted loop playsinline preload="none" data-src="videos/lehanga.mp4" poster="images/Global.webp">
           Your browser does not support the video tag.
         </video>
         <div class="gallery-overlay">
@@ -589,7 +590,7 @@
       </div>
 
       <div class="gallery-item">
-        <video autoplay muted loop playsinline preload="none" data-src="videos/Anjardar Kurta.mp4">
+        <video autoplay muted loop playsinline preload="none" data-src="videos/Anjardar Kurta.mp4" poster="images/ourservice.webp">
           Your browser does not support the video tag.
         </video>
         <div class="gallery-overlay">
@@ -862,12 +863,33 @@
             loadCurrentVideo();
           }
 
-          // Load current video
+          const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+          const reducedDataMode = Boolean(connection && connection.saveData);
+
+          function prepareSlideVideo(video, preloadMode = 'metadata') {
+            if (!video) return;
+
+            const pendingSrc = video.getAttribute('data-src');
+            if (pendingSrc) {
+              video.src = pendingSrc;
+              video.removeAttribute('data-src');
+            }
+
+            video.preload = preloadMode;
+            if (video.readyState < 2) {
+              video.load();
+            }
+          }
+
+          // Load current slide video and warm up the next one.
           function loadCurrentVideo() {
             const currentVideo = slides[currentSlide].querySelector('video');
-            if (currentVideo && currentVideo.dataset.src && !currentVideo.src) {
-              currentVideo.src = currentVideo.dataset.src;
-              currentVideo.load();
+            prepareSlideVideo(currentVideo, reducedDataMode ? 'metadata' : 'auto');
+
+            if (totalSlides > 1) {
+              const nextSlide = (currentSlide + 1) % totalSlides;
+              const nextVideo = slides[nextSlide].querySelector('video');
+              prepareSlideVideo(nextVideo, 'metadata');
             }
           }
 
@@ -915,7 +937,7 @@
             });
           }
 
-          // Load current video
+          // Load current and next slide videos early.
           loadCurrentVideo();
         }
       });

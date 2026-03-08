@@ -1,5 +1,6 @@
 (function () {
   const CACHE_PREFIX = 'layout:';
+  const SERVICE_WORKER_PATH = 'sw.js';
 
   function readCache(filePath) {
     try {
@@ -113,6 +114,8 @@
   }
 
   async function initLayout() {
+    registerServiceWorker();
+
     await Promise.all([
       inject('site-header', 'components/header.html'),
       inject('site-footer', 'components/footer.html')
@@ -129,5 +132,15 @@
     document.addEventListener('DOMContentLoaded', initLayout);
   } else {
     initLayout();
+  }
+
+  function registerServiceWorker() {
+    if (!('serviceWorker' in navigator)) return;
+
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register(SERVICE_WORKER_PATH).catch(function (error) {
+        console.error('Service worker registration failed:', error);
+      });
+    });
   }
 })();

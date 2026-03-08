@@ -74,13 +74,61 @@ function runWhenVisible(target, callback, rootMargin = '240px 0px') {
     observer.observe(target);
 }
 
+function getConnectionProfile() {
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const effectiveType = ((connection && connection.effectiveType) || '').toLowerCase();
+    const isConstrained = Boolean(connection && connection.saveData) || /(^|-)2g/.test(effectiveType);
+    return { connection, effectiveType, isConstrained };
+}
+
+function warmupDeferredVideos(videos, options = {}) {
+    if (!Array.isArray(videos) || !videos.length) return;
+
+    const autoCount = Math.max(0, Number(options.autoCount || 0));
+    const metadataCount = Math.max(0, Number(options.metadataCount || 0));
+    const staggerMs = Math.max(0, Number(options.staggerMs || 0));
+    const total = Math.min(videos.length, autoCount + metadataCount);
+
+    const warmVideo = (video, preloadMode) => {
+        if (!video) return;
+
+        const src = video.getAttribute('data-src');
+        if (src) {
+            video.src = src;
+            video.removeAttribute('data-src');
+        } else {
+            const deferredSource = video.querySelector('source[data-src]');
+            if (deferredSource) {
+                deferredSource.src = deferredSource.getAttribute('data-src');
+                deferredSource.removeAttribute('data-src');
+            }
+        }
+
+        if (!video.currentSrc && !video.getAttribute('src')) return;
+
+        video.preload = preloadMode;
+        if (video.readyState < 1 || preloadMode === 'auto') {
+            video.load();
+        }
+        video.dataset.videoPrefetched = '1';
+    };
+
+    videos.slice(0, total).forEach((video, index) => {
+        const preloadMode = index < autoCount ? 'auto' : 'metadata';
+        const run = () => warmVideo(video, preloadMode);
+        if (index === 0 || staggerMs === 0) {
+            run();
+        } else {
+            setTimeout(run, index * staggerMs);
+        }
+    });
+}
+
 function lazyLoadDeferredMedia(root = document) {
     const deferredVideos = Array.from(root.querySelectorAll('video[data-src]'))
         .filter(video => !video.closest('#slider'));
     const deferredImages = Array.from(root.querySelectorAll('img[data-src]'));
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    const effectiveType = ((connection && connection.effectiveType) || '').toLowerCase();
-    const isConstrainedNetwork = Boolean(connection && connection.saveData) || /(^|-)2g/.test(effectiveType);
+    const { isConstrained: isConstrainedNetwork } = getConnectionProfile();
     const videoRootMargin = isConstrainedNetwork ? '700px 0px' : '1600px 0px';
     const imageRootMargin = isConstrainedNetwork ? '360px 0px' : '900px 0px';
     const warmupCount = isConstrainedNetwork ? 1 : 3;
@@ -399,6 +447,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const pathname = window.location.pathname.toLowerCase();
     const currentPage = pathname.substring(pathname.lastIndexOf('/') + 1);
     const isHomePage = currentPage === '' || currentPage === 'index.html';
+    const connectionProfile = getConnectionProfile();
 
     // Load blog posts on homepage
     const blogPostsContainer = document.getElementById('blogPosts');
@@ -406,10 +455,68 @@ document.addEventListener('DOMContentLoaded', function() {
         runWhenVisible(blogPostsContainer, fetchBlogPosts, '320px 0px');
     }
 
-    // Load products on homepage
+    // Load products on homepage before users finish reading the About section.
+    const aboutSection = document.getElementById('about');
+    const productsSection = document.getElementById('products');
     const productsContainer = document.getElementById('productsContainer');
     if (productsContainer && isHomePage) {
-        runWhenVisible(productsContainer, loadHomepageProducts, '320px 0px');
+        let productsRequested = false;
+        const requestHomepageProducts = () => {
+            if (productsRequested) return;
+            productsRequested = true;
+            loadHomepageProducts();
+        };
+
+        if (aboutSection) {
+            runWhenVisible(
+                aboutSection,
+                requestHomepageProducts,
+                connectionProfile.isConstrained ? '500px 0px' : '1200px 0px'
+            );
+        } else {
+            runWhenVisible(
+                productsContainer,
+                requestHomepageProducts,
+                connectionProfile.isConstrained ? '700px 0px' : '1500px 0px'
+            );
+        }
+
+        // Fallback prefetch so products are ready even if observers are delayed.
+        setTimeout(requestHomepageProducts, connectionProfile.isConstrained ? 900 : 250);
+    }
+
+    // Warm up garment gallery videos when users approach the products section.
+    const garmentGallerySection = document.getElementById('garment-gallery');
+    if (garmentGallerySection && isHomePage) {
+        let galleryWarmupStarted = false;
+        const warmupGalleryVideos = () => {
+            if (galleryWarmupStarted) return;
+            galleryWarmupStarted = true;
+
+            const galleryVideos = Array.from(garmentGallerySection.querySelectorAll('video[data-src]'));
+            warmupDeferredVideos(galleryVideos, {
+                autoCount: connectionProfile.isConstrained ? 1 : 2,
+                metadataCount: connectionProfile.isConstrained ? 1 : Math.max(0, galleryVideos.length - 2),
+                staggerMs: connectionProfile.isConstrained ? 420 : 180
+            });
+            optimizeAutoplayVideos(garmentGallerySection);
+        };
+
+        if (productsSection) {
+            runWhenVisible(
+                productsSection,
+                warmupGalleryVideos,
+                connectionProfile.isConstrained ? '250px 0px' : '900px 0px'
+            );
+        } else {
+            runWhenVisible(
+                garmentGallerySection,
+                warmupGalleryVideos,
+                connectionProfile.isConstrained ? '700px 0px' : '1400px 0px'
+            );
+        }
+
+        setTimeout(warmupGalleryVideos, connectionProfile.isConstrained ? 2300 : 1200);
     }
 
     // Update the submitInquiryForm function
@@ -509,7 +616,7 @@ function submitInquiryForm(form) {
 }
 
     function loadHomepageProducts() {
-    fetch('php/get-products.php')
+    fetch('php/get-products.php?limit=4')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -518,9 +625,7 @@ function submitInquiryForm(form) {
         })
         .then(products => {
             if (Array.isArray(products) && products.length > 0) {
-                // Limit to first 4 products only
-                const limitedProducts = products.slice(0, 4);
-                renderProducts(limitedProducts, productsContainer);
+                renderProducts(products, productsContainer);
             } else {
                 productsContainer.innerHTML = '<p class="no-content">No products available yet.</p>';
             }
@@ -567,6 +672,15 @@ function renderProducts(products, container) {
         `;
         container.appendChild(productElement);
     });
+
+    const productVideos = Array.from(container.querySelectorAll('video[data-src]'));
+    if (productVideos.length) {
+        warmupDeferredVideos(productVideos, {
+            autoCount: connectionProfile.isConstrained ? 1 : 2,
+            metadataCount: connectionProfile.isConstrained ? 1 : Math.max(0, Math.min(productVideos.length, 4) - 2),
+            staggerMs: connectionProfile.isConstrained ? 450 : 220
+        });
+    }
 
     lazyLoadDeferredMedia(container);
     optimizeAutoplayVideos(container);

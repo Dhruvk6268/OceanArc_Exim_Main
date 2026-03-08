@@ -1,0 +1,58 @@
+# Include these rules inside your Nginx `server { ... }` block.
+# Adjust paths if your app is served from a subdirectory.
+
+etag on;
+
+gzip on;
+gzip_vary on;
+gzip_proxied any;
+gzip_comp_level 5;
+gzip_min_length 1024;
+gzip_types
+  text/plain
+  text/css
+  text/javascript
+  application/javascript
+  application/json
+  application/xml
+  image/svg+xml;
+
+# HTML should revalidate so updates appear quickly.
+location ~* \.html$ {
+  expires -1;
+  add_header Cache-Control "public, max-age=0, must-revalidate";
+}
+
+# Dynamic endpoints: never cache.
+location ~* ^/(api|php)/ {
+  add_header Cache-Control "no-store, no-cache, must-revalidate, max-age=0" always;
+}
+
+location ~* \.php$ {
+  add_header Cache-Control "no-store, no-cache, must-revalidate, max-age=0" always;
+}
+
+# Service worker file should always be revalidated.
+location = /sw.js {
+  expires -1;
+  add_header Cache-Control "no-cache";
+}
+
+# CSS/JS are static but filenames are not hashed, so keep TTL moderate.
+location ~* \.(?:css|js)$ {
+  expires 7d;
+  add_header Cache-Control "public, max-age=604800, stale-while-revalidate=86400";
+}
+
+# Fonts and images can be cached longer.
+location ~* \.(?:woff2?|ttf|otf|eot|png|jpe?g|gif|webp|ico|svg)$ {
+  expires 30d;
+  add_header Cache-Control "public, max-age=2592000, immutable";
+}
+
+# Video files: long cache with byte-range support.
+location ~* \.(?:mp4|webm)$ {
+  expires 30d;
+  add_header Cache-Control "public, max-age=2592000";
+  add_header Accept-Ranges "bytes";
+}
